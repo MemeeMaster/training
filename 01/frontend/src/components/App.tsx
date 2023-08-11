@@ -1,13 +1,19 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Form from "./Form";
 import LoggedIn from "./LoggedIn";
+import useAuth from "../hooks/useAuth";
 
 const App = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Form />} />
-        <Route path="/logged" element={<LoggedIn />} />
+        {!isAuthenticated ? (
+          <Route path="/" element={<Form />} />
+        ) : (
+          <Route path="/logged" element={<LoggedIn />} />
+        )}
       </Routes>
     </Router>
   );

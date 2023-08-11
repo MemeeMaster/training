@@ -1,27 +1,30 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
+import { executeAuthentication } from "../api/AuthenticationService";
+import useAuth from "../hooks/useAuth";
 
-interface Props {
-  onLoginChange: () => void;
-}
-
-const Login = ({ onLoginChange }: Props) => {
+const Login = () => {
   const [error, setError] = useState(false);
   const navigate = useNavigate();
+  const { handleAuthChange, handleLoginChange } = useAuth();
 
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: ({ email, password }) => {
-      if (email === "a@b.c" && password === "abc") {
+    onSubmit: async (data) => {
+      try {
+        await executeAuthentication(data);
+
         setError(false);
+        handleAuthChange(true);
         navigate("/logged");
-      } else {
-        console.log("Error");
+      } catch (e) {
+        console.log(e);
         setError(true);
+        handleAuthChange(false);
       }
     },
   });
@@ -46,7 +49,7 @@ const Login = ({ onLoginChange }: Props) => {
         />
         <input type="submit" value="Login" />
       </form>
-      <p className="link" onClick={onLoginChange}>
+      <p className="link" onClick={handleLoginChange}>
         Registration
       </p>
       {error ? <p className="error">Wrong credentials</p> : null}

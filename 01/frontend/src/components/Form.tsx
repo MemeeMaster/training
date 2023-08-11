@@ -1,22 +1,11 @@
-import { useState } from "react";
 import Login from "./Login";
 import Registration from "./Registration";
+import useAuth from "../hooks/useAuth";
 
 const Form = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const { isLogin } = useAuth();
 
-  const handleLoginChange = () => {
-    setIsLogin((prevState) => !prevState);
-  };
-  return (
-    <>
-      {isLogin ? (
-        <Login onLoginChange={handleLoginChange} />
-      ) : (
-        <Registration onLoginChange={handleLoginChange} />
-      )}
-    </>
-  );
+  return <>{isLogin ? <Login /> : <Registration />}</>;
 };
 
 export default Form;

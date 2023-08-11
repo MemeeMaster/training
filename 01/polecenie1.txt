@@ -7,3 +7,5 @@ zrób formularze pod logowanie i rejestracje, zrób obsługę api tokena za pomo
 oczywiście api i apka kliencka musowo szyfrowana tzn https
 
 a i dodatkoo, api oczywiscie połączone z bazą danych, tutaj będziesz mógł się zapoznać z ORM
+
+private final String SECRET_KEY = "47d3132e0aaf08e270eae4bf6225c1d7f6d2c2ff62921fbbbc2313085ed39d0a";
