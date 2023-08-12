@@ -17,16 +17,16 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private final String SECRET_KEY;
-    private final String ISSUER;
-    private final String AUDIENCE;
-    private final int EXPIRATION;
+    private String SECRET_KEY;
+    private String ISSUER;
+    private String AUDIENCE;
+    private int EXPIRATION;
 
-    public JwtService(@Value("${SECRET_KEY}") String SECRET_KEY, @Value("${ISSUER}") String ISSUER, @Value("${AUDIENCE}") String AUDIENCE, @Value("${EXPIRATION}") int EXPIRATION) {
+    public JwtService(@Value("${environment.secret}") String SECRET_KEY, @Value("${environment.issuer}") String ISSUER, @Value("${environment.audience}") String AUDIENCE, @Value("${environment.expiration}") int EXPIRATION) {
         this.SECRET_KEY = SECRET_KEY;
         this.ISSUER = ISSUER;
         this.AUDIENCE = AUDIENCE;
-        this.EXPIRATION = EXPIRATION; // SET IN MINUTES
+        this.EXPIRATION = EXPIRATION;
     }
 
     public String extractUsername(String token) {

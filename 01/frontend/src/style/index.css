@@ -2,6 +2,7 @@ html {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-size: 62.5%;
   overflow: hidden;
 }
 
@@ -12,6 +13,8 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: #1f1f1f;
+  color: #c2c2c2;
   font-family: sans-serif;
 }
 
@@ -23,7 +26,7 @@ body {
 }
 
 .header {
-  font-size: 2.5em;
+  font-size: 4.5em;
 }
 
 .form {
@@ -36,12 +39,41 @@ body {
 }
 
 .link {
+  font-size: 1.5rem;
   color: #009dff;
   text-decoration: underline;
   cursor: pointer;
 }
 
 .error {
-  color: #ff0000;
+  color: #ff6347;
   margin: 0;
+}
+
+.textInput,
+.button {
+  font-size: 1.5rem;
+  padding: 0.3em;
+  background-color: transparent;
+  border: 1px solid #c2c2c2;
+  color: #c2c2c2;
+}
+
+.textInput {
+  &:focus {
+    outline: 1px solid #c2c2c2;
+  }
+}
+
+.button {
+  margin-top: 0.4em;
+  padding: 1em 2em;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s, font-weight 0.2s;
+
+  &:hover {
+    background-color: #c2c2c2;
+    color: #1f1f1f;
+    font-weight: bold;
+  }
 }

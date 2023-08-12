@@ -1,31 +1,17 @@
-import { useState } from "react";
 import { useFormik } from "formik";
-import { useNavigate } from "react-router-dom";
-import { executeAuthentication } from "../api/AuthenticationService";
-import useAuth from "../hooks/useAuth";
+import useAuth from "@hooks/useAuth";
+import RequestData from "@interfaces/Api";
 
 const Login = () => {
-  const [error, setError] = useState(false);
-  const navigate = useNavigate();
-  const { handleAuthChange, handleLoginChange } = useAuth();
+  const { handleLogin, handleLoginChange, error } = useAuth();
 
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
-    onSubmit: async (data) => {
-      try {
-        await executeAuthentication(data);
-
-        setError(false);
-        handleAuthChange(true);
-        navigate("/logged");
-      } catch (e) {
-        console.log(e);
-        setError(true);
-        handleAuthChange(false);
-      }
+    onSubmit: (data: RequestData) => {
+      handleLogin(data);
     },
   });
 
@@ -39,6 +25,7 @@ const Login = () => {
           id="email"
           onChange={formik.handleChange}
           value={formik.values.email}
+          className="textInput"
         />
         <label htmlFor="password">Password:</label>
         <input
@@ -46,8 +33,9 @@ const Login = () => {
           id="password"
           onChange={formik.handleChange}
           value={formik.values.password}
+          className="textInput"
         />
-        <input type="submit" value="Login" />
+        <input type="submit" value="Login" className="button"/>
       </form>
       <p className="link" onClick={handleLoginChange}>
         Registration

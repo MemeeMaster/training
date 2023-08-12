@@ -1,6 +1,6 @@
-import Login from "./Login";
-import Registration from "./Registration";
-import useAuth from "../hooks/useAuth";
+import Login from "@components/Login";
+import Registration from "@components/Registration";
+import useAuth from "@hooks/useAuth";
 
 const Form = () => {
   const { isLogin } = useAuth();
