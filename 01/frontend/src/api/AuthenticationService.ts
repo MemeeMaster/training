@@ -11,9 +11,3 @@ export const executeAuthentication = async (data: RequestData) => {
 export const executeRegistration = async (data: RequestData) => {
   return await apiClient.post(registrationPath, data);
 };
-
-// export const executeLogout = async () => {
-//   return await apiClient.post(logoutPath, null, {
-//     withCredentials: true,
-//   });
-// };

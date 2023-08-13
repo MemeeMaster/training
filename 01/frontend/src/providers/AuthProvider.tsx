@@ -40,7 +40,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const handleLogout = () => {
     try {
-      // await executeLogout();
       localStorage.removeItem("jwtToken");
       setIsAuthenticated(false);
       navigate("/");
@@ -56,12 +55,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   setInterval(() => {
     const token = localStorage.getItem("jwtToken");
-    if (!token) return;
 
-    const expiration = jwt_decode<JwtPayload>(token).exp! * 1000;
-
-    if (expiration < Date.now()) {
-      handleLogout();
+    if (!token && isAuthenticated) handleLogout();
+    else if (!token && !isAuthenticated) return;
+    else if (token) {
+      const expiration = jwt_decode<JwtPayload>(token).exp! * 1000;
+      if (expiration < Date.now()) {
+        handleLogout();
+      }
     }
   }, 10000);
 

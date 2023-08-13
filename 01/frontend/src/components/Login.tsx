@@ -35,7 +35,7 @@ const Login = () => {
           value={formik.values.password}
           className="textInput"
         />
-        <input type="submit" value="Login" className="button"/>
+        <input type="submit" value="Login" className="button" />
       </form>
       <p className="link" onClick={handleLoginChange}>
         Registration

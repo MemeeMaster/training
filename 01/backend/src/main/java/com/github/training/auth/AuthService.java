@@ -4,7 +4,6 @@ import com.github.training.jwt.JwtService;
 import com.github.training.user.User;
 import com.github.training.user.UserRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,22 +18,12 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final boolean SECURE;
-    private final String PATH;
-    private final int MAX_AGE;
-    private final String DOMAIN;
-    private final String SAME_SITE;
 
-    public AuthService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, @Value("${environment.secure}") boolean SECURE, @Value("${environment.path}") String PATH, @Value("${environment.age}") int MAX_AGE, @Value("${environment.domain}") String DOMAIN, @Value("${environment.same.site}") String SAME_SITE) {
+    public AuthService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
-        this.SECURE = SECURE;
-        this.PATH = PATH;
-        this.MAX_AGE = MAX_AGE;
-        this.DOMAIN = DOMAIN;
-        this.SAME_SITE = SAME_SITE;
     }
 
     @Transactional
@@ -47,7 +36,10 @@ public class AuthService {
         User newUser = new User(
                 request.getEmail(),
                 passwordEncoder.encode(request.getPassword()),
-                User.Role.USER
+                User.Role.USER,
+                false,
+                false,
+                true
         );
         repository.save(newUser);
         return new ResponseEntity<>("Account created.", HttpStatus.OK);
@@ -61,18 +53,4 @@ public class AuthService {
 
         return ResponseEntity.ok(jwtToken);
     }
-
-//    @Transactional
-//    public ResponseEntity<Object> logout() {
-//        ResponseCookie deleteJwtCookie = ResponseCookie.from("jwt-token", null)
-//                .httpOnly(true)
-//                .secure(SECURE)
-//                .path(PATH)
-//                .maxAge(-1)
-//                .domain(DOMAIN)
-//                .sameSite(SAME_SITE)
-//                .build();
-//
-//        return ResponseEntity.ok(deleteJwtCookie);
-//    }
 }

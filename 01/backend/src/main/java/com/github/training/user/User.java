@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
@@ -26,13 +27,23 @@ public class User implements UserDetails {
     @Email
     private String email;
     private String password;
+    private LocalDate passwordExpiration;
     @Enumerated(EnumType.STRING)
     private Role role;
+    private boolean expired;
+    private boolean locked;
+    private boolean enabled;
+    @Transient
+    private int passwordExp = 30;
 
-    public User(String email, String password, Role role) {
+    public User(String email, String password, Role role, boolean expired, boolean locked, boolean enabled) {
         this.email = email;
         this.password = password;
+        this.passwordExpiration = LocalDate.now().plusDays(passwordExp);
         this.role = role;
+        this.expired = expired;
+        this.locked = locked;
+        this.enabled = enabled;
     }
 
     @Override
@@ -47,22 +58,22 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !expired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !locked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return passwordExpiration.isAfter(LocalDate.now());
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
     public enum Role {
