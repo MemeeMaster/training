@@ -1,9 +1,7 @@
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-
-interface Props {
-  onLoginChange: () => void;
-}
+import useAuth from "@hooks/useAuth";
+import { executeRegistration } from "@api/AuthenticationService";
 
 const validation = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -16,7 +14,9 @@ const validation = Yup.object().shape({
     .required("Required"),
 });
 
-const Registration = ({ onLoginChange }: Props) => {
+const Registration = () => {
+  const { handleLoginChange } = useAuth();
+
   return (
     <div className="wrapper">
       <h2 className="header">Registration</h2>
@@ -27,32 +27,48 @@ const Registration = ({ onLoginChange }: Props) => {
           repeatPassword: "",
         }}
         validationSchema={validation}
-        onSubmit={(values) => {
-          console.log("Cool: ", values);
+        onSubmit={async ({ email, password }) => {
+          try {
+            await executeRegistration({ email, password });
+
+            handleLoginChange();
+          } catch (e) {
+            throw new Error("Registration error");
+          }
         }}
       >
         {({ errors, touched }) => (
           <Form className="form">
             <label htmlFor="email">E-mail:</label>
-            <Field name="email" id="email" />
+            <Field name="email" id="email" className="textInput" />
             {errors.email && touched.email ? (
               <p className="error">{errors.email}</p>
             ) : null}
             <label htmlFor="password">Password:</label>
-            <Field name="password" id="password" type="password" />
+            <Field
+              name="password"
+              id="password"
+              type="password"
+              className="textInput"
+            />
             {errors.password && touched.password ? (
               <p className="error">{errors.password}</p>
             ) : null}
             <label htmlFor="repeatPassword">Repeat password:</label>
-            <Field name="repeatPassword" id="repeatPassword" type="password" />
+            <Field
+              name="repeatPassword"
+              id="repeatPassword"
+              type="password"
+              className="textInput"
+            />
             {errors.repeatPassword && touched.repeatPassword ? (
               <p className="error">{errors.repeatPassword}</p>
             ) : null}
-            <input type="submit" value="Submit" />
+            <input type="submit" value="Submit" className="button" />
           </Form>
         )}
       </Formik>
-      <p className="link" onClick={onLoginChange}>
+      <p className="link" onClick={handleLoginChange}>
         Login
       </p>
     </div>

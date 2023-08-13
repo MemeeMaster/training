@@ -1,21 +1,20 @@
-import { useState } from "react";
-import Login from "./Login";
-import Registration from "./Registration";
+import React, { useEffect } from "react";
+import Login from "@components/Login";
+import Registration from "@components/Registration";
+import useAuth from "@hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Form = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const { isLogin, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLoginChange = () => {
-    setIsLogin((prevState) => !prevState);
-  };
+  useEffect(() => {
+    if (isAuthenticated) navigate(-1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <>
-      {isLogin ? (
-        <Login onLoginChange={handleLoginChange} />
-      ) : (
-        <Registration onLoginChange={handleLoginChange} />
-      )}
-    </>
+    <React.Fragment>{isLogin ? <Login /> : <Registration />}</React.Fragment>
   );
 };
 
