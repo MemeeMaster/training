@@ -22,9 +22,4 @@ public class AuthController {
     public ResponseEntity<Object> authenticate(@RequestBody AuthRequest request) {
         return service.authenticate(request);
     }
-
-//    @PostMapping("/logout")
-//    public ResponseEntity<Object> logout() {
-//        return service.logout();
-//    }
 }

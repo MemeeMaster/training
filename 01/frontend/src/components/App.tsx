@@ -5,6 +5,7 @@ import LoggedIn from "@components/LoggedIn";
 import useAuth from "@hooks/useAuth";
 import React from "react";
 import RedirectIfNotAuthenticated from "./RedirectIfNotAuthenticated";
+import Toast from "./Toast";
 
 const App = () => {
   const { authenticate } = useAuth();
@@ -21,24 +22,27 @@ const App = () => {
   const protectedRoutes = [{ path: "/logged", component: <LoggedIn /> }];
 
   return (
-    <Routes>
-      {publicRoutes.map((route, idx) => (
-        <Route path={route.path} key={idx} element={route.component} />
-      ))}
-      {protectedRoutes.map((route, idx) => (
-        <Route
-          path={route.path}
-          key={idx}
-          element={
-            <React.Fragment>
-              <RedirectIfNotAuthenticated>
-                {route.component}
-              </RedirectIfNotAuthenticated>
-            </React.Fragment>
-          }
-        />
-      ))}
-    </Routes>
+    <React.Fragment>
+      <Toast />
+      <Routes>
+        {publicRoutes.map((route, idx) => (
+          <Route path={route.path} key={idx} element={route.component} />
+        ))}
+        {protectedRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            key={idx}
+            element={
+              <React.Fragment>
+                <RedirectIfNotAuthenticated>
+                  {route.component}
+                </RedirectIfNotAuthenticated>
+              </React.Fragment>
+            }
+          />
+        ))}
+      </Routes>
+    </React.Fragment>
   );
 };
 

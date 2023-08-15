@@ -8,9 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService {
@@ -31,7 +31,7 @@ public class AuthService {
         User user = repository.findByEmail(request.getEmail()).orElse(null);
 
         if (user != null)
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User with this email already exists.");
+            return new ResponseEntity<>("An account with this e-mail already exists.", HttpStatus.CONFLICT);
 
         User newUser = new User(
                 request.getEmail(),
@@ -47,10 +47,17 @@ public class AuthService {
 
     @Transactional
     public ResponseEntity<Object> authenticate(AuthRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        var jwtToken = jwtService.generateToken(user);
+        try{
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+            User user = repository.findByEmail(request.getEmail()).orElse(null);
 
-        return ResponseEntity.ok(jwtToken);
+            if(user == null)
+                return new ResponseEntity<>("Account doesn't exist.", HttpStatus.NOT_FOUND);
+
+            String jwtToken = jwtService.generateToken(user);
+            return ResponseEntity.ok(jwtToken);
+        } catch (AuthenticationException exception){
+            return new ResponseEntity<>("Wrong credentials.", HttpStatus.UNAUTHORIZED);
+        }
     }
 }

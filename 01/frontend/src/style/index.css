@@ -1,3 +1,7 @@
+#root {
+  position: relative;
+}
+
 html {
   padding: 0;
   margin: 0;
@@ -76,4 +80,45 @@ body {
     color: #1f1f1f;
     font-weight: bold;
   }
+}
+
+.toast {
+  padding: 1em;
+  min-width: 15em;
+  position: absolute;
+  top: 5em;
+  left: 5em;
+  background-color: rgb(46, 46, 46);
+  border: 1px solid #c2c2c2;
+  border-radius: 15px;
+  box-shadow: 5px 5px 5px 0 rgb(22, 22, 22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s;
+}
+
+.toast p {
+  margin: 0;
+}
+
+.toastTitle {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.7rem;
+  font-weight: bold;
+  border-bottom: 1px solid #c2c2c2;
+}
+
+.toastTitle svg {
+  cursor: pointer;
+}
+
+.toastContent {
+  margin-top: 0.5em;
+  font-size: 1.3rem;
+}
+
+.active {
+  opacity: 1;
+  pointer-events: all;
 }

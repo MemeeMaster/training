@@ -2,6 +2,8 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import useAuth from "@hooks/useAuth";
 import { executeRegistration } from "@api/AuthenticationService";
+import useToast from "@hooks/useToast";
+import { AxiosError } from "axios";
 
 const validation = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
@@ -16,6 +18,7 @@ const validation = Yup.object().shape({
 
 const Registration = () => {
   const { handleLoginChange } = useAuth();
+  const { handleToastOpening } = useToast();
 
   return (
     <div className="wrapper">
@@ -29,11 +32,14 @@ const Registration = () => {
         validationSchema={validation}
         onSubmit={async ({ email, password }) => {
           try {
-            await executeRegistration({ email, password });
-
+            const res = await executeRegistration({ email, password });
+            console.log(res);
             handleLoginChange();
           } catch (e) {
-            throw new Error("Registration error");
+            if (e instanceof AxiosError) handleToastOpening(e.response!.data);
+            else {
+              handleToastOpening("Registration error.");
+            }
           }
         }}
       >

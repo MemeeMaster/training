@@ -1,9 +1,9 @@
 import { useFormik } from "formik";
 import useAuth from "@hooks/useAuth";
-import RequestData from "@interfaces/Api";
+import { RequestData } from "@interfaces/Api";
 
 const Login = () => {
-  const { handleLogin, handleLoginChange, error } = useAuth();
+  const { handleLogin, handleLoginChange } = useAuth();
 
   const formik = useFormik({
     initialValues: {
@@ -40,7 +40,6 @@ const Login = () => {
       <p className="link" onClick={handleLoginChange}>
         Registration
       </p>
-      {error ? <p className="error">Wrong credentials</p> : null}
     </div>
   );
 };
