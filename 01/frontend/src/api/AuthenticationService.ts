@@ -1,14 +1,13 @@
 import { apiClient } from "@api/ApiClient";
-import { RequestData, ResponseData } from "@interfaces/Api";
+import { Login, RequestData, ResponseData } from "@interfaces/Api";
 import paths from "@api/ApiPaths";
-import axios from "axios";
 
-const { authenticationPath, registrationPath } = paths;
+const { authenticationPath, registrationPath, testPath } = paths;
 
 export const executeAuthentication = async (
   data: RequestData
-): Promise<string> => {
-  return await apiClient.post(authenticationPath, data).then((res) => res.data);
+): Promise<ResponseData<Login>> => {
+  return await apiClient.post(authenticationPath, data);
 };
 
 export const executeRegistration = async (
@@ -18,5 +17,5 @@ export const executeRegistration = async (
 };
 
 export const executeTest = async () => {
-  return await axios.get("http://localhost:8080/test");
+  return await apiClient.get(testPath);
 };

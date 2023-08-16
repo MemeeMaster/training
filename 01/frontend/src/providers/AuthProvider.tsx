@@ -1,11 +1,11 @@
-import { ReactNode, createContext, useState, useEffect } from "react";
+import { ReactNode, createContext, useState } from "react";
 import { AuthContextType } from "@interfaces/ContextTypes";
 import { useNavigate } from "react-router-dom";
 import { executeAuthentication } from "@api/AuthenticationService";
 import { RequestData } from "@interfaces/Api";
-import jwt_decode, { JwtPayload } from "jwt-decode";
 import useToast from "@hooks/useToast";
 import { AxiosError } from "axios";
+import { jwtToken, refreshToken } from "@env/environments";
 
 export const AuthContext = createContext<AuthContextType>({
   isLogin: true,
@@ -22,30 +22,15 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
   const { handleToastOpening } = useToast();
 
-  useEffect(() => {
-    setInterval(() => {
-      const token = localStorage.getItem("jwtToken");
-
-      if (!token && isAuthenticated) handleLogout();
-      else if (!token && !isAuthenticated) return;
-      else if (token) {
-        const expiration = jwt_decode<JwtPayload>(token).exp! * 1000;
-        if (expiration < Date.now()) {
-          handleLogout();
-        }
-      }
-    }, 10000);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const handleLoginChange = () => {
     setIsLogin((prevState) => !prevState);
   };
 
   const handleLogin = async (data: RequestData) => {
     try {
-      const response: string = await executeAuthentication(data);
-      localStorage.setItem("jwtToken", response);
+      const response = await executeAuthentication(data);
+      localStorage.setItem(jwtToken, response.data.accessToken);
+      localStorage.setItem(refreshToken, response.data.refreshToken);
 
       authenticate();
     } catch (e) {
@@ -59,7 +44,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
+    localStorage.removeItem(jwtToken);
+    localStorage.removeItem(refreshToken);
     setIsAuthenticated(false);
     navigate("/");
     handleToastOpening("Logged out.");

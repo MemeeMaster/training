@@ -7,7 +7,8 @@
       "@hooks/*": ["hooks/*"],
       "@interfaces/*": ["interfaces/*"],
       "@providers/*": ["providers/*"],
-      "@style/*": ["style/*"]
+      "@style/*": ["style/*"],
+      "@env/*": ["env/*"]
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

@@ -4,6 +4,7 @@ export interface RequestData {
   email: string;
   password: string;
 }
+
 export interface ResponseData<T> {
   data: T;
   status: number;
@@ -11,4 +12,10 @@ export interface ResponseData<T> {
   config: Record<string, unknown>;
   headers: AxiosHeaders;
   request: XMLHttpRequest;
+}
+
+export interface Login {
+  userId: number;
+  accessToken: string;
+  refreshToken: string;
 }

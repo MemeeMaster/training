@@ -2,10 +2,7 @@ package com.github.training.user;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,9 +12,9 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
-@Setter
 @Getter
+@Setter
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
     @Setter(AccessLevel.NONE)
