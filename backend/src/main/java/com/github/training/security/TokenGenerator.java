@@ -48,8 +48,7 @@ public class TokenGenerator {
                 .issuer(ISSUER)
                 .audience(List.of(AUDIENCE))
                 .issuedAt(now)
-//                .expiresAt(now.plus(JWT_EXPIRATION, ChronoUnit.MINUTES))
-                .expiresAt(now.plus(1, ChronoUnit.MINUTES))
+                .expiresAt(now.plus(JWT_EXPIRATION, ChronoUnit.MINUTES))
                 .subject(String.valueOf(user.getId()))
                 .build();
 
@@ -78,9 +77,8 @@ public class TokenGenerator {
             );
         }
 
-        TokenDTO tokenDTO = new TokenDTO();
-        tokenDTO.setUserId(user.getId());
-        tokenDTO.setAccessToken(createAccessToken(authentication));
+        int userId = user.getId();
+        String accessToken = createAccessToken(authentication);
 
         String refreshToken;
         if (authentication.getCredentials() instanceof Jwt jwt) {
@@ -96,8 +94,7 @@ public class TokenGenerator {
         } else {
             refreshToken = createRefreshToken(authentication);
         }
-        tokenDTO.setRefreshToken(refreshToken);
 
-        return tokenDTO;
+        return new TokenDTO(userId, accessToken, refreshToken);
     }
 }

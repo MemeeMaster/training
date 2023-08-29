@@ -37,24 +37,23 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<TokenDTO> register(@RequestBody SignupDTO signupDTO){
-        User user = new User(signupDTO.getEmail(), signupDTO.getPassword(), User.Role.USER, false, false, true);
+        User user = new User(signupDTO.email(), signupDTO.password(), User.Role.USER, false, false, true);
         userService.createUser(user);
-        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.getPassword(), List.of());
+        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.password(), List.of());
 
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 
     @PostMapping("/login")
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
-        Authentication authentication = daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.getEmail(), loginDTO.getPassword()));
+        Authentication authentication = daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.email(), loginDTO.password()));
 
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
     }
 
     @PostMapping("/token")
     public ResponseEntity<TokenDTO> token(@RequestBody TokenDTO tokenDTO) {
-        System.out.println(tokenDTO.getRefreshToken());
-        Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.getRefreshToken()));
+        Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.refreshToken()));
         Jwt jwt = (Jwt) authentication.getCredentials();
 
         return ResponseEntity.ok(tokenGenerator.createToken(authentication));
