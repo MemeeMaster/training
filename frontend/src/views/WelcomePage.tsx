@@ -1,7 +1,7 @@
 import useAuth from "@hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
-const LoggedIn = () => {
+const WelcomePage = () => {
   const { forceLogout } = useAuth();
   const navigate = useNavigate();
 
@@ -22,4 +22,4 @@ const LoggedIn = () => {
   );
 };
 
-export default LoggedIn;
+export default WelcomePage;

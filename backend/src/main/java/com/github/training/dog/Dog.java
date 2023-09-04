@@ -21,13 +21,15 @@ public class Dog {
     private int id;
     private String name;
     private String breed;
+    private String gender;
     private int age;
     private String color;
     private String collarColor;
 
-    public Dog(String name, String breed, int age, String color, String collarColor) {
+    public Dog(String name, String breed, String gender, int age, String color, String collarColor) {
         this.name = name;
         this.breed = breed;
+        this.gender = gender;
         this.age = age;
         this.color = color;
         this.collarColor = collarColor;

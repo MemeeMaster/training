@@ -3,7 +3,6 @@ import { DogPage } from "@interfaces/Api";
 import { executeDogList, executePdfDownload } from "@api/DogsService";
 import useAuth from "@hooks/useAuth";
 import useToast from "@hooks/useToast";
-import { useNavigate } from "react-router-dom";
 
 const Table = () => {
   const [dogPage, setDogPage] = useState<DogPage>();
@@ -11,7 +10,6 @@ const Table = () => {
   const [isDataFetched, setIsDataFetched] = useState(false);
   const { authenticate } = useAuth();
   const { handleToastOpening } = useToast();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isDataFetched) fetchDogsData(1);
@@ -51,15 +49,13 @@ const Table = () => {
   return (
     <>
       {isDataFetched && dogPage ? (
-        <>
-          <button className="button" onClick={() => navigate("/logged")}>
-            Back
-          </button>
+        <div className="dogTable">
           <table>
             <thead>
               <tr>
                 <th>Name</th>
                 <th>Breed</th>
+                <th>Gender</th>
                 <th>Age</th>
                 <th>Color</th>
                 <th>Collar color</th>
@@ -71,6 +67,7 @@ const Table = () => {
                 <tr key={el.id}>
                   <td>{el.name}</td>
                   <td>{el.breed}</td>
+                  <td>{el.gender}</td>
                   <td>{formatAge(el.age)}</td>
                   <td>{el.color}</td>
                   <td>{el.collarColor}</td>
@@ -87,7 +84,7 @@ const Table = () => {
             </tbody>
           </table>
           {paginationButtons.map((el) => el)}
-        </>
+        </div>
       ) : (
         <p>Loading ...</p>
       )}

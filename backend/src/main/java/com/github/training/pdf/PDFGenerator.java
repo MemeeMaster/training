@@ -33,9 +33,9 @@ public class PDFGenerator {
 
             document.add(paragraph);
 
-            PdfPTable table = new PdfPTable(5);
+            PdfPTable table = new PdfPTable(6);
             table.setWidthPercentage(100f);
-            table.setWidths(new int[]{3, 3, 3, 3, 3});
+            table.setWidths(new int[]{3, 3, 3, 3, 3, 3});
             table.setSpacingBefore(5);
 
             PdfPCell cell = new PdfPCell();
@@ -49,6 +49,8 @@ public class PDFGenerator {
             table.addCell(cell);
             cell.setPhrase(new Phrase("Breed", font));
             table.addCell(cell);
+            cell.setPhrase(new Phrase("Gender", font));
+            table.addCell(cell);
             cell.setPhrase(new Phrase("Age", font));
             table.addCell(cell);
             cell.setPhrase(new Phrase("Color", font));
@@ -58,6 +60,7 @@ public class PDFGenerator {
 
             table.addCell(dog.getName());
             table.addCell(dog.getBreed());
+            table.addCell(dog.getGender());
             table.addCell(String.valueOf(dog.getAge()));
             table.addCell(dog.getColor());
             table.addCell(dog.getCollarColor());

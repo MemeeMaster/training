@@ -1,13 +1,13 @@
 import { useEffect, useMemo } from "react";
 import { Route, Routes } from "react-router-dom";
 import Form from "@components/AuthenticationForm";
-import LoggedIn from "@components/LoggedIn";
+import WelcomePage from "@views/WelcomePage";
 import useAuth from "@hooks/useAuth";
-import RedirectIfNotAuthenticated from "./RedirectIfNotAuthenticated";
-import Toast from "./Toast";
+import RedirectIfNotAuthenticated from "../components/RedirectIfNotAuthenticated";
+import Toast from "../components/Toast";
 import { jwtToken } from "@env/environments";
 import { apiClient } from "@api/ApiClient";
-import Table from "./Table";
+import DogTable from "./DogTable";
 
 const App = () => {
   const { handleLogout, authenticate } = useAuth();
@@ -38,8 +38,8 @@ const App = () => {
   const publicRoutes = [{ path: "/", component: <Form /> }];
 
   const protectedRoutes = [
-    { path: "/logged", component: <LoggedIn /> },
-    { path: "/list", component: <Table /> },
+    { path: "/logged", component: <WelcomePage /> },
+    { path: "/list", component: <DogTable /> },
   ];
 
   return (

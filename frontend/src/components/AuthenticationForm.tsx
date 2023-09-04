@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import Login from "@components/Login";
-import Registration from "@components/Registration";
+import Login from "@views/Login";
+import Registration from "@views/Registration";
 import useAuth from "@hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
