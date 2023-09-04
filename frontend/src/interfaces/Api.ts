@@ -14,6 +14,8 @@ export interface ResponseData<T> {
   request: XMLHttpRequest;
 }
 
+// === AUTH RESPONSES ===
+
 export interface LoginDTO {
   userId: number;
   accessToken: string;
@@ -22,4 +24,29 @@ export interface LoginDTO {
 
 export interface TokenDTO {
   refreshToken: string | null;
+}
+
+// === DOGS RESPONSES ===
+
+export interface Dog {
+  id: number;
+  name: string;
+  breed: string;
+  age: number;
+  color: string;
+  collarColor: string;
+}
+
+export interface DogPage {
+  content: Dog[];
+  pageable: Record<string, unknown>;
+  totalPages: number;
+  totalElements: number;
+  last: boolean;
+  size: number;
+  number: number;
+  sort: Record<string, unknown>;
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
 }

@@ -3,11 +3,11 @@ import { Route, Routes } from "react-router-dom";
 import Form from "@components/AuthenticationForm";
 import LoggedIn from "@components/LoggedIn";
 import useAuth from "@hooks/useAuth";
-import React from "react";
 import RedirectIfNotAuthenticated from "./RedirectIfNotAuthenticated";
 import Toast from "./Toast";
 import { jwtToken } from "@env/environments";
 import { apiClient } from "@api/ApiClient";
+import Table from "./Table";
 
 const App = () => {
   const { handleLogout, authenticate } = useAuth();
@@ -25,7 +25,7 @@ const App = () => {
         }
       }
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -37,10 +37,13 @@ const App = () => {
 
   const publicRoutes = [{ path: "/", component: <Form /> }];
 
-  const protectedRoutes = [{ path: "/logged", component: <LoggedIn /> }];
+  const protectedRoutes = [
+    { path: "/logged", component: <LoggedIn /> },
+    { path: "/list", component: <Table /> },
+  ];
 
   return (
-    <React.Fragment>
+    <>
       <Toast />
       <Routes>
         {publicRoutes.map((route, idx) => (
@@ -51,16 +54,16 @@ const App = () => {
             path={route.path}
             key={idx}
             element={
-              <React.Fragment>
+              <>
                 <RedirectIfNotAuthenticated>
                   {route.component}
                 </RedirectIfNotAuthenticated>
-              </React.Fragment>
+              </>
             }
           />
         ))}
       </Routes>
-    </React.Fragment>
+    </>
   );
 };
 

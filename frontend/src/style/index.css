@@ -88,10 +88,10 @@ body {
   position: absolute;
   top: 5em;
   left: 5em;
-  background-color: rgb(46, 46, 46);
+  background-color: #2e2e2e;
   border: 1px solid #c2c2c2;
   border-radius: 15px;
-  box-shadow: 5px 5px 5px 0 rgb(22, 22, 22);
+  box-shadow: 5px 5px 5px 0 #161616;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.1s;
@@ -121,4 +121,52 @@ body {
 .active {
   opacity: 1;
   pointer-events: all;
+}
+
+table {
+  font-size: 1.3rem;
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+
+thead {
+  color: #2e2e2e;
+  background-color: #ffffff;
+}
+
+td,
+th {
+  border: 1px solid #ffffff;
+  padding: 0.3em;
+}
+
+.pageButton {
+  margin: 0.5em;
+  width: 1.8em;
+  aspect-ratio: 1/1;
+  color: #ffffff;
+  background-color: transparent;
+  font-size: 1.5rem;
+  font-weight: bold;
+  border-radius: 50%;
+  border: 1px solid #ffffff;
+  font-family: sans-serif;
+  cursor: pointer;
+  transition: color 0.3s, background-color 0.3s;
+
+  &:hover {
+    color: #2e2e2e;
+    background-color: #ffffff;
+  }
+}
+
+.downloadButton {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+
+  &:hover {
+    background-color: #c2c2c2;
+  }
 }

@@ -1,8 +1,13 @@
 import useAuth from "@hooks/useAuth";
-import { executeTest } from "@api/AuthenticationService";
+import { useNavigate } from "react-router-dom";
 
 const LoggedIn = () => {
   const { forceLogout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleListButton = () => {
+    navigate("/list");
+  };
 
   return (
     <div>
@@ -10,8 +15,8 @@ const LoggedIn = () => {
       <button className="button" onClick={forceLogout}>
         Logout
       </button>
-      <button className="button" onClick={executeTest}>
-        Test
+      <button className="button" onClick={handleListButton}>
+        Dog List
       </button>
     </div>
   );

@@ -1,8 +1,10 @@
-const paths = {
+export const authPaths = {
   authenticationPath: "/api/auth/login",
   registrationPath: "/api/auth/register",
   refreshPath: "/api/auth/token",
-  testPath: "/api/users/1"
 };
 
-export default paths;
+export const dogsPaths = {
+  listPath: "/dogs/list/page",
+  pdfPath: "/dogs/list"
+};

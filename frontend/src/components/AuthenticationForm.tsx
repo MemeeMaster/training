@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import Login from "@components/Login";
 import Registration from "@components/Registration";
 import useAuth from "@hooks/useAuth";
@@ -14,7 +14,7 @@ const Form = () => {
   }, []);
 
   return (
-    <React.Fragment>{isLogin ? <Login /> : <Registration />}</React.Fragment>
+    <>{isLogin ? <Login /> : <Registration />}</>
   );
 };
 

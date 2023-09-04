@@ -15,7 +15,7 @@ const RedirectIfNotAuthenticated = ({ children }: IProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return <React.Fragment>{children}</React.Fragment>;
+  return <>{children}</>;
 };
 
 export default RedirectIfNotAuthenticated;

@@ -1,8 +1,9 @@
 import { apiClient } from "@api/ApiClient";
 import { LoginDTO, TokenDTO, RequestData, ResponseData } from "@interfaces/Api";
-import paths from "@api/ApiPaths";
+import { authPaths } from "@api/ApiPaths";
 
-const { authenticationPath, registrationPath, refreshPath, testPath } = paths;
+const { authenticationPath, registrationPath, refreshPath } =
+  authPaths;
 
 export const executeAuthentication = async (
   data: RequestData
@@ -22,6 +23,3 @@ export const executeRefresh = async (
   return await apiClient.post(refreshPath, data);
 };
 
-export const executeTest = async () => {
-  return await apiClient.get(testPath);
-};
