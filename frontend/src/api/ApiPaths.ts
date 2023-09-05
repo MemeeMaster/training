@@ -6,5 +6,5 @@ export const authPaths = {
 
 export const dogsPaths = {
   listPath: "/dogs/list/page",
-  pdfPath: "/dogs/list"
+  pdfPath: `/dogs/list/pdf`
 };

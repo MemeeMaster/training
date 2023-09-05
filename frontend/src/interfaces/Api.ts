@@ -38,6 +38,14 @@ export interface Dog {
   collarColor: string;
 }
 
+export interface DogFilter {
+  breed: string;
+  color: string;
+  gender: string;
+  age: number | null;
+  searchBarData: string;
+}
+
 export interface DogPage {
   content: Dog[];
   pageable: Record<string, unknown>;

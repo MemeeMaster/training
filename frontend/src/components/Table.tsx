@@ -1,45 +1,26 @@
-import { JSX, useEffect, useState } from "react";
-import { DogPage } from "@interfaces/Api";
-import { executeDogList, executePdfDownload } from "@api/DogsService";
+import { useEffect } from "react";
+import { executePdfDownload } from "@api/DogsService";
 import useAuth from "@hooks/useAuth";
-import useToast from "@hooks/useToast";
+import useData from "@hooks/useData";
 
 const Table = () => {
-  const [dogPage, setDogPage] = useState<DogPage>();
-  const [paginationButtons, setPaginationButtons] = useState<JSX.Element[]>([]);
-  const [isDataFetched, setIsDataFetched] = useState(false);
   const { authenticate } = useAuth();
-  const { handleToastOpening } = useToast();
+  const {
+    isDataFetched,
+    fetchDogsData,
+    dogData,
+    paginationButtons,
+    handleFetchStatus,
+  } = useData();
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => handleFetchStatus(false), []);
 
   useEffect(() => {
     if (!isDataFetched) fetchDogsData(1);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDataFetched, authenticate]);
-
-  const fetchDogsData = async (page: number) => {
-    try {
-      const dogsData = await executeDogList(page);
-      setDogPage(dogsData);
-
-      const newButtons = [];
-      for (let i = 1; i <= dogsData.totalPages; i++) {
-        newButtons.push(
-          <button
-            className="pageButton"
-            key={i}
-            onClick={() => fetchDogsData(i)}
-          >
-            {i}
-          </button>
-        );
-      }
-
-      setPaginationButtons(newButtons);
-      setIsDataFetched(true);
-    } catch (e) {
-      handleToastOpening("Couldn't fetch dogs data.");
-    }
-  };
 
   const formatAge = (age: number) => {
     if (age == 1) return `${age} year`;
@@ -48,7 +29,7 @@ const Table = () => {
 
   return (
     <>
-      {isDataFetched && dogPage ? (
+      {isDataFetched && dogData ? (
         <div className="dogTable">
           <table>
             <thead>
@@ -63,7 +44,7 @@ const Table = () => {
               </tr>
             </thead>
             <tbody>
-              {dogPage.content.map((el) => (
+              {dogData.content.map((el) => (
                 <tr key={el.id}>
                   <td>{el.name}</td>
                   <td>{el.breed}</td>

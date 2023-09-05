@@ -3,14 +3,13 @@ import SearchBlock from "@components/SearchBlock";
 import FilterBlock from "@components/FilterBlock";
 
 const DogTable = () => {
-
   return (
     <div className="tableSectionWrapper">
-      <div className="searchWrapper"> {/*100%*/}
-          <SearchBlock />
+      <div className="searchWrapper">
+        <SearchBlock />
       </div>
       <div className="tableWrapper">
-        <Table /> {/*85%*/}
+        <Table />
         <FilterBlock />
       </div>
     </div>
@@ -18,13 +17,3 @@ const DogTable = () => {
 };
 
 export default DogTable;
-
-
-{/* <div>
-<button className="button" onClick={() => navigate("/logged")}>
-  Back
-</button>
-<div>
-  <Table />
-</div>
-</div> */}

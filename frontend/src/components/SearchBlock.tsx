@@ -8,7 +8,7 @@ const SearchBlock = () => {
       <button className="button" onClick={() => navigate("/logged")}>
         Back
       </button>
-      <input type="text" placeholder="Search" className="searchInput"/>
+      <input type="text" placeholder="Search" className="searchInput" />
     </div>
   );
 };
