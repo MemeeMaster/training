@@ -33,4 +33,9 @@ public class DogController {
     public ResponseEntity<OptionsDTO> getOptions() {
         return dogService.getOptions();
     }
+
+    @PostMapping("/sort/{field}/{direction}/page/{page}")
+    public ResponseEntity<Page<Dog>> getDogPageSorted(@PathVariable String field,@PathVariable String direction, @PathVariable int page, @RequestBody FilterDTO filter){
+            return dogService.getDogPageSorted(field, direction, page, filter);
+    }
 }

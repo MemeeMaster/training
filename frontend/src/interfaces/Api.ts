@@ -64,3 +64,10 @@ export interface DogOptions {
   breeds: string[];
   colors: string[];
 }
+
+export interface DogSortDTO {
+  page: number;
+  field: string;
+  direction: string;
+  filter: DogFilter;
+}

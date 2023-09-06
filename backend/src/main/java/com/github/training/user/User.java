@@ -1,5 +1,6 @@
 package com.github.training.user;
 
+import com.github.training.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.*;
@@ -71,9 +72,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public enum Role {
-        USER, ADMIN
     }
 }

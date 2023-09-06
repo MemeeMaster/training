@@ -8,4 +8,5 @@ export const dogsPaths = {
   listPath: "/dogs/list/page",
   pdfPath: "/dogs/list/pdf",
   optionsPath: "/dogs/options",
+  sortPath: "/dogs/sort",
 };

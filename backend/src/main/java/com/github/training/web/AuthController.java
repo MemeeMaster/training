@@ -3,6 +3,7 @@ package com.github.training.web;
 import com.github.training.dto.LoginDTO;
 import com.github.training.dto.SignupDTO;
 import com.github.training.dto.TokenDTO;
+import com.github.training.enums.Role;
 import com.github.training.security.TokenGenerator;
 import com.github.training.user.User;
 import com.github.training.user.UserService;
@@ -37,7 +38,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<TokenDTO> register(@RequestBody SignupDTO signupDTO){
-        User user = new User(signupDTO.email(), signupDTO.password(), User.Role.USER, false, false, true);
+        User user = new User(signupDTO.email(), signupDTO.password(), Role.USER, false, false, true);
         userService.createUser(user);
         Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.password(), List.of());
 
