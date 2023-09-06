@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.SortedSet;
+
 @Repository
 public interface DogRepository extends JpaRepository<Dog, Integer> {
     @Query("SELECT d FROM Dog d " +
@@ -29,4 +31,10 @@ public interface DogRepository extends JpaRepository<Dog, Integer> {
             @Param("searchBarData") String searchBarData,
             Pageable pageable
     );
+
+    @Query("SELECT DISTINCT d.breed FROM Dog d")
+    SortedSet<String> findDistinctBreeds();
+
+    @Query("SELECT DISTINCT d.color FROM Dog d")
+    SortedSet<String> findDistinctColors();
 }

@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import useData from "@hooks/useData";
 
 const SearchBlock = () => {
+  const { filters, handleFilterChange } = useData();
   const navigate = useNavigate();
 
   return (
@@ -8,7 +10,15 @@ const SearchBlock = () => {
       <button className="button" onClick={() => navigate("/logged")}>
         Back
       </button>
-      <input type="text" placeholder="Search" className="searchInput" />
+      <input
+        className="searchInput"
+        type="text"
+        placeholder="Search"
+        value={filters.searchBarData}
+        onChange={(e) => {
+          handleFilterChange("searchBarData", e);
+        }}
+      />
     </div>
   );
 };

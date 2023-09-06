@@ -1,17 +1,9 @@
+import { ChangeEvent } from "react";
 import { DogFilter, DogPage } from "@interfaces/Api";
 import { DataContextType } from "@interfaces/ContextTypes";
 import { createContext, ReactNode, useState } from "react";
 import { executeDogList } from "@api/DogsService";
 import useToast from "@hooks/useToast";
-
-export const DataContext = createContext<DataContextType>({
-  dogData: undefined,
-  paginationButtons: [],
-  isDataFetched: false,
-  handleFiltersChange: () => {},
-  fetchDogsData: () => {},
-  handleFetchStatus: () => {},
-});
 
 const initialState: DogFilter = {
   breed: "",
@@ -21,8 +13,18 @@ const initialState: DogFilter = {
   searchBarData: "",
 };
 
+export const DataContext = createContext<DataContextType>({
+  dogData: undefined,
+  paginationButtons: [],
+  isDataFetched: false,
+  filters: initialState,
+  handleFilterChange: () => {},
+  handleFiltersReset: () => {},
+  fetchDogsData: () => {},
+  handleFetchStatus: () => {},
+});
+
 const DataProvider = ({ children }: { children: ReactNode }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [filters, setFilters] = useState<DogFilter>(initialState);
   const [dogData, setDogData] = useState<DogPage>();
   const [paginationButtons, setPaginationButtons] = useState<JSX.Element[]>([]);
@@ -49,18 +51,25 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
 
       setPaginationButtons(newButtons);
       setIsDataFetched(true);
-      return response;
     } catch (e) {
       handleToastOpening("Couldn't fetch dogs data.");
     }
   };
 
-  const handleFiltersChange = (filter: DogFilter) => {
-    setFilters(filter);
-  };
-
   const handleFetchStatus = (isFetched: boolean) => {
     setIsDataFetched(isFetched);
+  };
+
+  const handleFiltersReset = () => {
+    setFilters(initialState);
+  }
+
+  const handleFilterChange = (
+    field: keyof DogFilter,
+    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const updatedState: DogFilter = { ...filters, [field]: e.target.value };
+    setFilters(updatedState);
   };
 
   return (
@@ -69,7 +78,9 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
         dogData,
         paginationButtons,
         isDataFetched,
-        handleFiltersChange,
+        filters,
+        handleFilterChange,
+        handleFiltersReset,
         fetchDogsData,
         handleFetchStatus,
       }}

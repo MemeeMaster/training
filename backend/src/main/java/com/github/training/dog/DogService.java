@@ -1,6 +1,7 @@
 package com.github.training.dog;
 
 import com.github.training.dto.FilterDTO;
+import com.github.training.dto.OptionsDTO;
 import com.github.training.pdf.PDFGenerator;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -30,5 +33,11 @@ public class DogService {
         response.setContentType("application/pdf");
         PDFGenerator generator = new PDFGenerator(dog);
         generator.generatePdf(response);
+    }
+
+    public ResponseEntity<OptionsDTO> getOptions() {
+        Set<String> breeds = dogRepository.findDistinctBreeds();
+        Set<String> colors = dogRepository.findDistinctColors();
+        return ResponseEntity.ok(new OptionsDTO(breeds, colors));
     }
 }

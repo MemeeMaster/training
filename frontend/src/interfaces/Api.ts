@@ -59,3 +59,8 @@ export interface DogPage {
   first: boolean;
   empty: boolean;
 }
+
+export interface DogOptions {
+  breeds: string[];
+  colors: string[];
+}

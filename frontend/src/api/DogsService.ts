@@ -1,8 +1,8 @@
 import { apiClient } from "@api/ApiClient";
-import { DogPage, DogFilter } from "@interfaces/Api";
+import { DogPage, DogFilter, DogOptions } from "@interfaces/Api";
 import { dogsPaths } from "@api/ApiPaths";
 
-const { listPath, pdfPath } = dogsPaths;
+const { listPath, pdfPath, optionsPath } = dogsPaths;
 
 export const executeDogList = async (
   page: number,
@@ -24,4 +24,8 @@ export const executePdfDownload = async (dogName: string, id: number) => {
       a.click();
       a.remove();
     });
+};
+
+export const executeOptionsFetch = async (): Promise<DogOptions> => {
+  return await apiClient.get(optionsPath).then((res) => res.data);
 };

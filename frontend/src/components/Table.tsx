@@ -18,7 +18,7 @@ const Table = () => {
 
   useEffect(() => {
     if (!isDataFetched) fetchDogsData(1);
-
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDataFetched, authenticate]);
 

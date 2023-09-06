@@ -1,6 +1,7 @@
 package com.github.training.dog;
 
 import com.github.training.dto.FilterDTO;
+import com.github.training.dto.OptionsDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -18,8 +19,6 @@ public class DogController {
 
     @PostMapping("/list/page/{page}")
     public ResponseEntity<Page<Dog>> getDogsPageFiltered(@PathVariable int page, @RequestBody FilterDTO filter) {
-        System.out.println(page);
-        System.out.println(filter.toString());
         return dogService.getDogsPageFiltered(page, filter);
     }
 
@@ -28,5 +27,10 @@ public class DogController {
     public CompletableFuture<Void> generatePdf(HttpServletResponse response, @PathVariable int id) {
         dogService.generatePdf(response, id);
         return CompletableFuture.completedFuture(null);
+    }
+
+    @GetMapping("/options")
+    public ResponseEntity<OptionsDTO> getOptions() {
+        return dogService.getOptions();
     }
 }

@@ -1,3 +1,4 @@
+import { ChangeEvent } from "react";
 import { RequestData, DogPage, DogFilter } from "./Api";
 
 export interface AuthContextType {
@@ -21,7 +22,12 @@ export interface DataContextType {
   dogData: DogPage | undefined;
   paginationButtons: JSX.Element[];
   isDataFetched: boolean;
-  handleFiltersChange: (filter: DogFilter) => void;
+  filters: DogFilter;
+  handleFilterChange: (
+    field: keyof DogFilter,
+    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => void;
+  handleFiltersReset: () => void,
   fetchDogsData: (page: number, filter?: DogFilter) => void;
   handleFetchStatus: (isFetched: boolean) => void;
 }
