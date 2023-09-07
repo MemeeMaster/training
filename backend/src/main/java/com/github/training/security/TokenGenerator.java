@@ -26,10 +26,10 @@ public class TokenGenerator {
     @Autowired
     @Qualifier("jwtRefreshTokenEncoder")
     JwtEncoder refreshTokenEncoder;
-    private int JWT_EXPIRATION;
-    private int REFRESH_EXPIRATION;
-    private String ISSUER;
-    private String AUDIENCE;
+    private final int JWT_EXPIRATION;
+    private final int REFRESH_EXPIRATION;
+    private final String ISSUER;
+    private final String AUDIENCE;
 
     public TokenGenerator(JwtEncoder accessTokenEncoder, JwtEncoder refreshTokenEncoder, @Value("${environment.jwt.expiration}") int JWT_EXPIRATION, @Value("${environment.jwt.refresh-expiration}") int REFRESH_EXPIRATION, @Value("${environment.issuer}") String ISSUER, @Value("${environment.audience}") String AUDIENCE) {
         this.accessTokenEncoder = accessTokenEncoder;

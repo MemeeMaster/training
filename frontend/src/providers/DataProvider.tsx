@@ -1,5 +1,10 @@
 import { ChangeEvent } from "react";
-import { DogFilter, DogPage } from "@interfaces/Api";
+import {
+  DogFilter,
+  DogPage,
+  DogSortDTO,
+  PaginationParams,
+} from "@interfaces/Api";
 import { DataContextType } from "@interfaces/ContextTypes";
 import { createContext, ReactNode, useState } from "react";
 import { executeDogList } from "@api/DogsService";
@@ -31,29 +36,42 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
   const [isDataFetched, setIsDataFetched] = useState(false);
   const { handleToastOpening } = useToast();
 
-  const fetchDogsData = async (page: number, filter = initialState) => {
+  const fetchDogsData = async ({
+    page,
+    field = "none",
+    direction = "none",
+    filter = initialState,
+  }: DogSortDTO) => {
     try {
-      const response = await executeDogList(page, filter);
+      const response = await executeDogList({ page, field, direction, filter });
       setDogData(response);
-
-      const newButtons = [];
-      for (let i = 1; i <= response.totalPages; i++) {
-        newButtons.push(
-          <button
-            className="pageButton"
-            key={i}
-            onClick={() => fetchDogsData(i, filter)}
-          >
-            {i}
-          </button>
-        );
-      }
-
-      setPaginationButtons(newButtons);
+      getPaginationButtons({ response, filter, direction, field });
       setIsDataFetched(true);
     } catch (e) {
       handleToastOpening("Couldn't fetch dogs data.");
     }
+  };
+
+  const getPaginationButtons = ({
+    response,
+    filter,
+    direction,
+    field,
+  }: PaginationParams) => {
+    const newButtons = [];
+    for (let i = 1; i <= response.totalPages; i++) {
+      newButtons.push(
+        <button
+          className="pageButton"
+          key={i}
+          onClick={() => fetchDogsData({ page: i, filter, direction, field })}
+        >
+          {i}
+        </button>
+      );
+    }
+
+    setPaginationButtons(newButtons);
   };
 
   const handleFetchStatus = (isFetched: boolean) => {
@@ -62,7 +80,7 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
 
   const handleFiltersReset = () => {
     setFilters(initialState);
-  }
+  };
 
   const handleFilterChange = (
     field: keyof DogFilter,

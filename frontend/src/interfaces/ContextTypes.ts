@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import { RequestData, DogPage, DogFilter } from "./Api";
+import { RequestData, DogPage, DogFilter, DogSortDTO } from "./Api";
 
 export interface AuthContextType {
   isLogin: boolean;
@@ -28,6 +28,6 @@ export interface DataContextType {
     e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => void;
   handleFiltersReset: () => void,
-  fetchDogsData: (page: number, filter?: DogFilter) => void;
+  fetchDogsData: (data: DogSortDTO) => void;
   handleFetchStatus: (isFetched: boolean) => void;
 }

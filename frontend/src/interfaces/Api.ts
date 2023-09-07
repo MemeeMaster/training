@@ -67,7 +67,19 @@ export interface DogOptions {
 
 export interface DogSortDTO {
   page: number;
-  field: string;
+  field?: string;
+  direction?: string;
+  filter?: DogFilter;
+}
+
+export interface DogSortConfig {
+  key: string | null;
   direction: string;
+}
+
+export interface PaginationParams {
+  response: DogPage;
   filter: DogFilter;
+  direction: string;
+  field: string;
 }

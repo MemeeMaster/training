@@ -1,14 +1,11 @@
 import { apiClient } from "@api/ApiClient";
-import { DogPage, DogFilter, DogOptions, DogSortDTO } from "@interfaces/Api";
+import { DogPage, DogOptions, DogSortDTO,  } from "@interfaces/Api";
 import { dogsPaths } from "@api/ApiPaths";
 
-const { listPath, pdfPath, optionsPath, sortPath } = dogsPaths;
+const { pdfPath, optionsPath, sortPath } = dogsPaths;
 
-export const executeDogList = async (
-  page: number,
-  filter: DogFilter
-): Promise<DogPage> => {
-  const path = `${listPath}/${page}`;
+export const executeDogList = async ({page, field, direction, filter}: DogSortDTO): Promise<DogPage> => {
+  const path = `${sortPath}/${field}/${direction}/page/${page}`;
   return await apiClient.post(path, filter).then((res) => res.data);
 };
 
@@ -30,7 +27,4 @@ export const executeOptionsFetch = async (): Promise<DogOptions> => {
   return await apiClient.get(optionsPath).then((res) => res.data);
 };
 
-export const executeDogsListSort = async ({page, field, direction, filter}: DogSortDTO): Promise<DogPage> => {
-  const path = `${sortPath}/${field}/${direction}/page/${page}`;
-  return await apiClient.post(path, filter).then((res) => res.data);
-};
+

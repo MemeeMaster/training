@@ -17,9 +17,9 @@ import java.util.concurrent.CompletableFuture;
 public class DogController {
     private DogService dogService;
 
-    @PostMapping("/list/page/{page}")
-    public ResponseEntity<Page<Dog>> getDogsPageFiltered(@PathVariable int page, @RequestBody FilterDTO filter) {
-        return dogService.getDogsPageFiltered(page, filter);
+    @PostMapping("/sort/{field}/{direction}/page/{page}")
+    public ResponseEntity<Page<Dog>> getDogPageSorted(@PathVariable String field,@PathVariable String direction, @PathVariable int page, @RequestBody FilterDTO filter){
+        return dogService.getDogPageSorted(field, direction, page, filter);
     }
 
     @GetMapping("/list/pdf/{id}")
@@ -32,10 +32,5 @@ public class DogController {
     @GetMapping("/options")
     public ResponseEntity<OptionsDTO> getOptions() {
         return dogService.getOptions();
-    }
-
-    @PostMapping("/sort/{field}/{direction}/page/{page}")
-    public ResponseEntity<Page<Dog>> getDogPageSorted(@PathVariable String field,@PathVariable String direction, @PathVariable int page, @RequestBody FilterDTO filter){
-            return dogService.getDogPageSorted(field, direction, page, filter);
     }
 }

@@ -15,9 +15,9 @@ import java.io.IOException;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @WebFilter("/*")
 public class CorsFilter implements Filter {
-    private String ALLOW_CREDENTIALS;
-    private String ALLOWED_ORIGINS;
-    private String MAX_AGE;
+    private final String ALLOW_CREDENTIALS;
+    private final String ALLOWED_ORIGINS;
+    private final String MAX_AGE;
 
     public CorsFilter(@Value("${environment.allow.credentials}") String ALLOW_CREDENTIALS, @Value("${environment.allow.origins}") String ALLOWED_ORIGINS, @Value("${environment.max.age}") String MAX_AGE) {
         this.ALLOW_CREDENTIALS = ALLOW_CREDENTIALS;

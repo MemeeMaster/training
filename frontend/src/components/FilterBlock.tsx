@@ -29,7 +29,7 @@ const FilterBlock = () => {
 
   const resetFilters = () => {
     handleFiltersReset();
-    fetchDogsData(1);
+    fetchDogsData({page: 1});
   }
 
   return (
@@ -60,7 +60,7 @@ const FilterBlock = () => {
       </select>
       <input type="number" className="filterInput" value={`${filters.age}`} placeholder="Age" min="1" onChange={(e) => {
         handleFilterChange("age", e)}}/>
-      <button className="filterInput" onClick={() => fetchDogsData(1, filters)}>Search</button>
+      <button className="filterInput" onClick={() => fetchDogsData({page: 1, filter: filters})}>Search</button>
       <button className="filterInput" onClick={resetFilters}>Reset filters</button>
     </div>
   );
