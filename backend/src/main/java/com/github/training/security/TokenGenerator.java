@@ -19,6 +19,10 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+/**
+ * TokenGenerator component containing logic used to generate JWT access tokens
+ * and refresh tokens
+ */
 @Component
 public class TokenGenerator {
     @Autowired
@@ -31,6 +35,16 @@ public class TokenGenerator {
     private final String ISSUER;
     private final String AUDIENCE;
 
+    /**
+     * Creates new TokenGenerator object / defines required fields.
+     *
+     * @param accessTokenEncoder - encodes access tokens.
+     * @param refreshTokenEncoder - encodes refresh tokens.
+     * @param JWT_EXPIRATION - JWT access token expiration days.
+     * @param REFRESH_EXPIRATION - JWT refresh token expiration days.
+     * @param ISSUER - token issuer.
+     * @param AUDIENCE - token audience.
+     */
     public TokenGenerator(JwtEncoder accessTokenEncoder, JwtEncoder refreshTokenEncoder, @Value("${environment.jwt.expiration}") int JWT_EXPIRATION, @Value("${environment.jwt.refresh-expiration}") int REFRESH_EXPIRATION, @Value("${environment.issuer}") String ISSUER, @Value("${environment.audience}") String AUDIENCE) {
         this.accessTokenEncoder = accessTokenEncoder;
         this.refreshTokenEncoder = refreshTokenEncoder;
@@ -70,6 +84,15 @@ public class TokenGenerator {
         return refreshTokenEncoder.encode(JwtEncoderParameters.from(claimsSet)).getTokenValue();
     }
 
+
+    /**
+     * Creates new {@code TokenDTO} ready to be sent to user in response.
+     * In more detail, it is checking if {@code refreshToken} is about to expire in 7 days.
+     * If it is, then it is going to refresh it, or not if it is not close to expiration.
+     *
+     * @param authentication - object containing authentication details.
+     * @return {@code new TokenDTO(userId, accessToken, refreshToken)} - TokenDTO with correct tokens.
+     */
     public TokenDTO createToken(Authentication authentication) {
         if (!(authentication.getPrincipal() instanceof User user)) {
             throw new BadCredentialsException(
@@ -86,14 +109,11 @@ public class TokenGenerator {
             Instant expiresAt = jwt.getExpiresAt();
             Duration duration = Duration.between(now, expiresAt);
             long daysUntilExpired = duration.toDays();
-            if (daysUntilExpired < 7) {
-                refreshToken = createRefreshToken(authentication);
-            } else {
-                refreshToken = jwt.getTokenValue();
-            }
-        } else {
-            refreshToken = createRefreshToken(authentication);
-        }
+
+            if (daysUntilExpired < 7) refreshToken = createRefreshToken(authentication);
+            else refreshToken = jwt.getTokenValue();
+
+        } else refreshToken = createRefreshToken(authentication);
 
         return new TokenDTO(userId, accessToken, refreshToken);
     }

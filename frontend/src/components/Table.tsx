@@ -9,6 +9,15 @@ const initialConfig: DogSortConfig = {
   direction: "none",
 };
 
+/**
+ * Table component for displaying and sorting dog data.
+ *
+ * The Table component displays a table of dog data, allowing users to sort the
+ * data by various columns (e.g., name, breed, age). It also includes a "Download"
+ * button to download a PDF report for each dog.
+ *
+ * @component
+ */
 const Table = () => {
   const [sortConfig, setSortConfig] = useState<DogSortConfig>(initialConfig);
   const { authenticate } = useAuth();
@@ -36,6 +45,14 @@ const Table = () => {
     return `${age} years`;
   };
 
+  /**
+   * Changes direction of sorting table. It fetches data based on props sent
+   * to {@code fetchDogsData}. 
+   * Direction is changed based on previous direction state.
+   * "ASC" -> "DESC" -> "NONE" -> "ASC" -> ...
+   * 
+   * @param key - field by which table is sorted
+   */
   const handleHeaderClick = (key: string) => {
     let direction = "asc";
 

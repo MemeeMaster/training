@@ -14,11 +14,28 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 
+
+/**
+ * PDF files generator. Creates PDF file containing formatted table
+ * with passed dog details.
+ */
 @AllArgsConstructor
 @Setter
 public class PDFGenerator {
+    /**
+     * Dog instance for which PDF is created.
+     */
     private Dog dog;
 
+    /**
+     * Generates a PDF document with dog information and sends it as a response to the HttpServletResponse.
+     * In more details, it is firstly setting file size to A4, and then is defining basic styling.
+     * Then it is adding title, table with 6 columns and table properties. At the end, header cells and
+     * data cells are added and filled with details followed by adding table to document and closing it.
+     *
+     * @param response The HttpServletResponse object to which the PDF will be sent.
+     * @throws ResponseStatusException Thrown if there is an error during PDF generation.
+     */
     public void generatePdf(HttpServletResponse response) {
         try {
             Document document = new Document(PageSize.A4);

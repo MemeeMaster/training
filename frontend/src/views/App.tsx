@@ -9,9 +9,24 @@ import { jwtToken } from "@env/environments";
 import { apiClient } from "@api/ApiClient";
 import DogTable from "./DogTable";
 
+/**
+ * Main application component.
+ *
+ * This component serves as the entry point of the application and is responsible
+ * for rendering different routes and handling user authentication and logout.
+ *
+ * @component
+ * @returns The App component.
+ */
 const App = () => {
   const { handleLogout, authenticate } = useAuth();
 
+  /**
+   * Hook for intercepting API responses.
+   *
+   * This hook uses Axios interceptors to handle API responses. It checks for
+   * unauthorized (401) responses and logs the user out in such cases.
+   */
   useMemo(() => {
     apiClient.interceptors.response.use(
       (response) => {
@@ -28,6 +43,12 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Effect hook for checking user authentication.
+   *
+   * This hook checks if the user is authenticated based on the presence of a
+   * JWT token in local storage and calls the `authenticate` function.
+   */
   useEffect(() => {
     if (localStorage.getItem(jwtToken) !== null) {
       authenticate();
@@ -35,8 +56,21 @@ const App = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Public routes for the application.
+   *
+   * An array of route objects representing public routes that don't require
+   * authentication.
+   */
   const publicRoutes = [{ path: "/", component: <Form /> }];
 
+  /**
+   * Protected routes for the application.
+   *
+   * An array of route objects representing protected routes that require
+   * authentication. These routes are wrapped in the `RedirectIfNotAuthenticated`
+   * component to ensure authentication before rendering.
+   */
   const protectedRoutes = [
     { path: "/logged", component: <WelcomePage /> },
     { path: "/list", component: <DogTable /> },

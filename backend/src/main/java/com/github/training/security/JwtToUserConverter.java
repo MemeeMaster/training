@@ -9,6 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * Class used to convert {@code User} object to JWT token.
+ */
 @Component
 public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthenticationToken> {
     @Override

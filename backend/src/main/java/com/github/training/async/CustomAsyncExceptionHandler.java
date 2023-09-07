@@ -8,6 +8,9 @@ import org.springframework.web.server.ResponseStatusException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
+/**
+ * Custom exception handler that is handling async void method exceptions.
+ */
 public class CustomAsyncExceptionHandler implements AsyncUncaughtExceptionHandler {
     @Override
     public void handleUncaughtException(Throwable throwable, @NonNull Method method, Object @NonNull ... obj) {

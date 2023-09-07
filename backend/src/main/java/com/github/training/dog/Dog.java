@@ -9,6 +9,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * Dog class containing structure of dog passed to database.
+ */
 @Entity
 @Getter
 @Setter
@@ -26,6 +29,16 @@ public class Dog {
     private String color;
     private String collarColor;
 
+    /**
+     * Creates new {@code Dog} object
+     *
+     * @param name - dog's name.
+     * @param breed - dog's breed.
+     * @param gender - dog's gender.
+     * @param age - dog's age.
+     * @param color - dog's color.
+     * @param collarColor - dog's collar color.
+     */
     public Dog(String name, String breed, String gender, int age, String color, String collarColor) {
         this.name = name;
         this.breed = breed;

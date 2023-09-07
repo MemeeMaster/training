@@ -3,6 +3,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import useToast from "@hooks/useToast";
 
+/**
+ * Provides toast interface containing message and close button.
+ * 
+ * @returns The Toast component
+ */
 const Toast = () => {
   const { showToast, message, handleToastClosing } = useToast();
 

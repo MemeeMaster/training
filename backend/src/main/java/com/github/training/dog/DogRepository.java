@@ -9,8 +9,26 @@ import org.springframework.stereotype.Repository;
 
 import java.util.SortedSet;
 
+/**
+ * Repository for {@code Dog} entity.
+ */
 @Repository
 public interface DogRepository extends JpaRepository<Dog, Integer> {
+    /**
+     * Returns results that are matching the filters. This is checking if
+     * entity has correct breed, gender, age, color and collarColor and then
+     * checks if searchBarData is included in any of those fields.
+     * This method is not case-sensitive and is passing entity if filter is null
+     * or empty ('').
+     *
+     * @param breed - requested breed.
+     * @param gender - requested gender.
+     * @param age - requested age.
+     * @param color - requested color.
+     * @param searchBarData - data from search bar.
+     * @param pageable - page filter details.
+     * @return {@code Page<Dog>} - dogs that match the criteria.
+     */
     @Query("SELECT d FROM Dog d " +
             "WHERE ( " +
             "    LOWER(d.name) LIKE LOWER(CONCAT('%', :searchBarData, '%')) " +
@@ -32,9 +50,17 @@ public interface DogRepository extends JpaRepository<Dog, Integer> {
             Pageable pageable
     );
 
+    /**
+     * Fetches all distinct dog breeds from database.
+     * @return {@code SortedSet<String>} containing Dog breeds.
+     */
     @Query("SELECT DISTINCT d.breed FROM Dog d")
     SortedSet<String> findDistinctBreeds();
 
+    /**
+     * Fetches all distinct dog colors from database.
+     * @return {@code SortedSet<String>} containing Dog colors.
+     */
     @Query("SELECT DISTINCT d.color FROM Dog d")
     SortedSet<String> findDistinctColors();
 }

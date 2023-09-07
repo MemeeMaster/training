@@ -12,6 +12,9 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * User class containing structure of user passed to database.
+ */
 @Entity
 @Getter
 @Setter
@@ -34,6 +37,16 @@ public class User implements UserDetails {
     @Transient
     private int passwordExp = 30;
 
+    /**
+     * Creates new User object.
+     *
+     * @param email    User's email address.
+     * @param password User's password.
+     * @param role     User's role in system.
+     * @param expired  Has the user account expired.
+     * @param locked   Has the user account been blocked.
+     * @param enabled  Has the user account been closed.
+     */
     public User(String email, String password, Role role, boolean expired, boolean locked, boolean enabled) {
         this.email = email;
         this.password = password;
@@ -44,11 +57,19 @@ public class User implements UserDetails {
         this.enabled = enabled;
     }
 
+    /**
+     * Returns roles attached to user. By default, it is only USER role.
+     * @return list of user roles.
+     */
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    /**
+     * Returns identifier by which the user is logged in.
+     * @return email of this User.
+     */
     @Override
     public String getUsername() {
         return this.email;

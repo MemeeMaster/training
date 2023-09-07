@@ -4,15 +4,27 @@ import { DogOptions } from "@interfaces/Api";
 import useToast from "@hooks/useToast";
 import useData from "@hooks/useData";
 
+/**
+ * Defines the initial state for search block options.
+ *
+ * @constant
+ */
 const initialState: DogOptions = {
   breeds: [],
   colors: [],
 };
 
+/**
+ * Provides set of components designed to set filters.
+ * 
+ * @component
+ * @returns The FilterBlock component
+ */
 const FilterBlock = () => {
   const [options, setOptions] = useState<DogOptions>(initialState);
   const { handleToastOpening } = useToast();
   const { filters, handleFilterChange, handleFiltersReset, fetchDogsData } = useData();
+
   useEffect(() => {
     const fetchOptions = async () => {
       try {
@@ -27,6 +39,11 @@ const FilterBlock = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Resets filters
+   * 
+   * @constant
+   */
   const resetFilters = () => {
     handleFiltersReset();
     fetchDogsData({page: 1});

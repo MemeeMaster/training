@@ -29,6 +29,9 @@ import org.springframework.security.oauth2.server.resource.web.access.BearerToke
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configuration class for web security settings.
+ */
 @Configuration
 @EnableMethodSecurity
 @AllArgsConstructor
@@ -40,6 +43,16 @@ public class WebSecurity {
     UserService userService;
     CorsFilter corsFilter;
 
+    /**
+     * Configures security filters and policies for HTTP requests.
+     * It configures CSRF, disables basic authentication, sets session management,
+     * defines which endpoints should pass without authentication, configures filters,
+     * exception handler and oauth2 server.
+     *
+     * @param http HttpSecurity object for configuring security.
+     * @return SecurityFilterChain instance with the defined security configurations.
+     * @throws Exception Thrown if there is an issue configuring security.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -59,12 +72,23 @@ public class WebSecurity {
         return http.build();
     }
 
+    /**
+     * Provides a JwtDecoder for decoding access tokens.
+     *
+     * @return JwtDecoder instance for decoding access tokens.
+     */
     @Bean
     @Primary
     JwtDecoder jwtAccessTokenDecoder() {
         return NimbusJwtDecoder.withPublicKey(keyUtils.getAccessTokenPublicKey()).build();
     }
 
+    /**
+     * Provides a JwtEncoder for encoding access tokens.
+     * It creates new RSAKey and passes it to JWT keys source and encoder.
+     *
+     * @return JwtEncoder instance for encoding access tokens.
+     */
     @Bean
     @Primary
     JwtEncoder jwtAccessTokenEncoder() {
@@ -76,12 +100,23 @@ public class WebSecurity {
         return new NimbusJwtEncoder(jwks);
     }
 
+    /**
+     * Provides a JwtDecoder for decoding refresh tokens.
+     *
+     * @return JwtDecoder instance for decoding refresh tokens.
+     */
     @Bean
     @Qualifier("jwtRefreshTokenDecoder")
     JwtDecoder jwtRefreshTokenDecoder() {
         return NimbusJwtDecoder.withPublicKey(keyUtils.getRefreshTokenPublicKey()).build();
     }
 
+    /**
+     * Provides a JwtEncoder for encoding refresh tokens.
+     * It creates new RSAKey and passes it to JWT keys source and encoder.
+     *
+     * @return JwtEncoder instance for encoding refresh tokens.
+     */
     @Bean
     @Qualifier("jwtRefreshTokenEncoder")
     JwtEncoder jwtRefreshTokenEncoder() {
@@ -93,6 +128,12 @@ public class WebSecurity {
         return new NimbusJwtEncoder(jwks);
     }
 
+    /**
+     * Provides a JwtAuthenticationProvider for refreshing JWT tokens by passing
+     * correct converter to JwtAuthenticationProvider.
+     *
+     * @return JwtAuthenticationProvider instance for refreshing JWT tokens.
+     */
     @Bean
     @Qualifier("jwtRefreshTokenAuthProvider")
     JwtAuthenticationProvider jwtRefreshTokenAuthProvider() {
@@ -101,6 +142,12 @@ public class WebSecurity {
         return provider;
     }
 
+    /**
+     * Provides a DaoAuthenticationProvider for authenticating users by passing
+     * correct encoder to DaoAuthenticationProvider.
+     *
+     * @return A DaoAuthenticationProvider instance for authenticating users.
+     */
     @Bean
     DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

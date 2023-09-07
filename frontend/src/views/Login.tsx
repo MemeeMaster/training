@@ -2,9 +2,20 @@ import { useFormik } from "formik";
 import useAuth from "@hooks/useAuth";
 import { RequestData } from "@interfaces/Api";
 
+/**
+ * Component for user login.
+ *
+ * This component provides a user login form that includes fields for email
+ * and password. It uses Formik for form handling.
+ *
+ * @component
+ * @returns The Login component.
+ */
 const Login = () => {
   const { handleLogin, handleLoginChange } = useAuth();
-
+    /**
+   * Hook for defining formik initial values and action on submit.
+   */
   const formik = useFormik({
     initialValues: {
       email: "",

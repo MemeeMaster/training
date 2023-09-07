@@ -5,6 +5,15 @@ import { executeRegistration } from "@api/AuthenticationService";
 import useToast from "@hooks/useToast";
 import { AxiosError } from "axios";
 
+/**
+ * Validation schema for user registration form.
+ *
+ * This Yup validation schema defines the validation rules for the user registration
+ * form. It specifies validation requirements for fields like email, password, and
+ * repeat password.
+ *
+ * @constant
+ */
 const validation = Yup.object().shape({
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string()
@@ -16,6 +25,16 @@ const validation = Yup.object().shape({
     .required("Required"),
 });
 
+/**
+ * Component for user registration.
+ *
+ * This component provides a user registration form that includes fields for email,
+ * password, and repeat password. It uses Formik for form handling and Yup for form
+ * validation.
+ *
+ * @component
+ * @returns The Registration component.
+ */
 const Registration = () => {
   const { handleLoginChange } = useAuth();
   const { handleToastOpening } = useToast();
@@ -47,7 +66,7 @@ const Registration = () => {
           <Form className="form">
             <label htmlFor="email">E-mail:</label>
             <Field name="email" id="email" className="textInput" />
-            
+
             {errors.email && touched.email ? (
               <p className="error">{errors.email}</p>
             ) : null}
