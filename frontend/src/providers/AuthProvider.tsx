@@ -3,12 +3,15 @@ import { AuthContextType } from "@interfaces/ContextTypes";
 import { useNavigate } from "react-router-dom";
 import {
   executeAuthentication,
+  executeLogout,
   executeRefresh,
 } from "@api/AuthenticationService";
 import { RequestData } from "@interfaces/Api";
 import useToast from "@hooks/useToast";
 import { AxiosError } from "axios";
-import { jwtToken, refreshToken } from "@env/environments";
+import { jwtToken } from "@env/environments";
+import { ROOT_PATH, WELCOME_PAGE_PATH } from "@config/routes";
+import Cookies from "universal-cookie";
 
 /**
  * Auth context for managing auth-related actions.
@@ -63,7 +66,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await executeAuthentication(data);
       localStorage.setItem(jwtToken, response.data.accessToken);
-      localStorage.setItem(refreshToken, response.data.refreshToken);
 
       authenticate();
     } catch (e) {
@@ -83,14 +85,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
    * optionally refreshing the session.
    */
   const handleLogout = async () => {
+    const cookies = new Cookies();
     try {
-      if (localStorage.getItem(refreshToken) !== null) {
-        const res = await executeRefresh({
-          refreshToken: localStorage.getItem(refreshToken),
-        }).then((res) => res.data);
+      if (cookies.get("refresh-present")) {
+        const res = await executeRefresh().then((res) => res.data);
 
         localStorage.setItem(jwtToken, res.accessToken);
-        localStorage.setItem(refreshToken, res.refreshToken);
         handleToastOpening("Session refreshed. Try again.");
       }
     } catch (e) {
@@ -101,15 +101,20 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   /**
    * Function to forcefully log the user out.
    *
-   * This function forcefully logs out the user by removing tokens from local
-   * storage and redirecting to the login page.
+   * This function forcefully logs out the user by removing access token from local
+   * storage and refresh token from cookies.
+   * Then redirects to the login page.
    */
-  const forceLogout = () => {
-    localStorage.removeItem(jwtToken);
-    localStorage.removeItem(refreshToken);
-    setIsAuthenticated(false);
-    navigate("/");
-    handleToastOpening("Logged out.");
+  const forceLogout = async () => {
+    try {
+      await executeLogout();
+      localStorage.removeItem(jwtToken);
+      setIsAuthenticated(false);
+      navigate(ROOT_PATH);
+      handleToastOpening("Logged out.");
+    } catch (e) {
+      handleToastOpening("Error during logout. Please try again.");
+    }
   };
 
   /**
@@ -120,7 +125,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
    */
   const authenticate = () => {
     setIsAuthenticated(true);
-    navigate("/logged");
+    navigate(WELCOME_PAGE_PATH);
     handleToastOpening("Logged in.");
   };
 

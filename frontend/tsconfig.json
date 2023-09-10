@@ -9,7 +9,8 @@
       "@providers/*": ["providers/*"],
       "@style/*": ["style/*"],
       "@env/*": ["env/*"],
-      "@views/*": ["views/*"]
+      "@views/*": ["views/*"],
+      "@config/*": ["config/*"],
     },
     "target": "ES2020",
     "useDefineForClassFields": true,

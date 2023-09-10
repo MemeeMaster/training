@@ -7,7 +7,7 @@
  */
 import { apiClient } from "@api/ApiClient";
 import { DogPage, DogOptions, DogSortDTO,  } from "@interfaces/Api";
-import { dogsPaths } from "@api/ApiPaths";
+import { dogsPaths } from "@config/apiPaths";
 
 const { pdfPath, optionsPath, sortPath } = dogsPaths;
 

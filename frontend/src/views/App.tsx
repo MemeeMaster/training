@@ -8,6 +8,7 @@ import Toast from "../components/Toast";
 import { jwtToken } from "@env/environments";
 import { apiClient } from "@api/ApiClient";
 import DogTable from "./DogTable";
+import { DATA_LIST_PATH, ROOT_PATH, WELCOME_PAGE_PATH } from "@config/routes";
 
 /**
  * Main application component.
@@ -62,7 +63,7 @@ const App = () => {
    * An array of route objects representing public routes that don't require
    * authentication.
    */
-  const publicRoutes = [{ path: "/", component: <Form /> }];
+  const publicRoutes = [{ path: ROOT_PATH, component: <Form /> }];
 
   /**
    * Protected routes for the application.
@@ -72,8 +73,8 @@ const App = () => {
    * component to ensure authentication before rendering.
    */
   const protectedRoutes = [
-    { path: "/logged", component: <WelcomePage /> },
-    { path: "/list", component: <DogTable /> },
+    { path: WELCOME_PAGE_PATH, component: <WelcomePage /> },
+    { path: DATA_LIST_PATH, component: <DogTable /> },
   ];
 
   return (

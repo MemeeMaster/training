@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
      * @param username identifier passed to identify user account.
      * @return {@code true} if User is found or {@code false} if not.
      */
-    public boolean userExistsByEmail(String username) {
+    public boolean isUserExistsByEmail(String username) {
         return userRepository.existsByEmail(username);
     }
 

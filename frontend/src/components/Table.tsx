@@ -34,7 +34,6 @@ const Table = () => {
   useEffect(() => handleFetchStatus(false), []);
 
   useEffect(() => {
-    // if (!isDataFetched) fetchDogsData(1);
     if (!isDataFetched) fetchDogsData({page: 1});
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

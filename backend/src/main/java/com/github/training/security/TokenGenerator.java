@@ -5,6 +5,9 @@ import com.github.training.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -38,12 +41,12 @@ public class TokenGenerator {
     /**
      * Creates new TokenGenerator object / defines required fields.
      *
-     * @param accessTokenEncoder - encodes access tokens.
+     * @param accessTokenEncoder  - encodes access tokens.
      * @param refreshTokenEncoder - encodes refresh tokens.
-     * @param JWT_EXPIRATION - JWT access token expiration days.
-     * @param REFRESH_EXPIRATION - JWT refresh token expiration days.
-     * @param ISSUER - token issuer.
-     * @param AUDIENCE - token audience.
+     * @param JWT_EXPIRATION      - JWT access token expiration days.
+     * @param REFRESH_EXPIRATION  - JWT refresh token expiration days.
+     * @param ISSUER              - token issuer.
+     * @param AUDIENCE            - token audience.
      */
     public TokenGenerator(JwtEncoder accessTokenEncoder, JwtEncoder refreshTokenEncoder, @Value("${environment.jwt.expiration}") int JWT_EXPIRATION, @Value("${environment.jwt.refresh-expiration}") int REFRESH_EXPIRATION, @Value("${environment.issuer}") String ISSUER, @Value("${environment.audience}") String AUDIENCE) {
         this.accessTokenEncoder = accessTokenEncoder;
@@ -91,9 +94,9 @@ public class TokenGenerator {
      * If it is, then it is going to refresh it, or not if it is not close to expiration.
      *
      * @param authentication - object containing authentication details.
-     * @return {@code new TokenDTO(userId, accessToken, refreshToken)} - TokenDTO with correct tokens.
+     * @return {@code ResponseEntity(TokenDTO) with refreshToken secure cookie} - TokenDTO with correct tokens.
      */
-    public TokenDTO createToken(Authentication authentication) {
+    public ResponseEntity<TokenDTO> createToken(Authentication authentication) {
         if (!(authentication.getPrincipal() instanceof User user)) {
             throw new BadCredentialsException(
                     MessageFormat.format("principal {0} is not of User type", authentication.getPrincipal().getClass())
@@ -102,8 +105,8 @@ public class TokenGenerator {
 
         int userId = user.getId();
         String accessToken = createAccessToken(authentication);
-
         String refreshToken;
+
         if (authentication.getCredentials() instanceof Jwt jwt) {
             Instant now = Instant.now();
             Instant expiresAt = jwt.getExpiresAt();
@@ -115,6 +118,64 @@ public class TokenGenerator {
 
         } else refreshToken = createRefreshToken(authentication);
 
-        return new TokenDTO(userId, accessToken, refreshToken);
+        ResponseCookie refreshTokenCookie = createCookie("refresh-token", refreshToken, true);
+        ResponseCookie isRefreshTokenPresentCookie = createCookie("refresh-present", "present", false);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, isRefreshTokenPresentCookie.toString())
+                .body(new TokenDTO(userId, accessToken));
+    }
+
+    /**
+     * Destroys refresh token stored in Cookies.
+     * This method is overriding refresh token with values to cookie
+     * with same name, but empty values which leads to its deletion.
+     *
+     * @return ResponseEntity with empty cookies.
+     */
+    public ResponseEntity<Object> destroyToken() {
+        ResponseCookie emptyRefreshTokenCookie = destroyCookie("refresh-token");
+        ResponseCookie emptyIsRefreshTokenPresentCookie = destroyCookie("refresh-present");
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, emptyRefreshTokenCookie.toString())
+                .header(HttpHeaders.SET_COOKIE, emptyIsRefreshTokenPresentCookie.toString())
+                .build();
+    }
+
+    /**
+     * Creates token cookie.
+     *
+     * @param name  - cookie's name.
+     * @param value - cookie's value (token).
+     * @return ResponseCookie with name and value from parameters with secure settings.
+     */
+    private ResponseCookie createCookie(String name, String value, boolean secured) {
+        return ResponseCookie.from(name, value)
+                .httpOnly(secured)
+                .secure(secured)
+                .path("/")
+                .maxAge((long) REFRESH_EXPIRATION * 24 * 60 * 60)
+                .domain("localhost")
+                .sameSite("strict")
+                .build();
+    }
+
+    /**
+     * Destroys requested Cookie.
+     *
+     * @param name - name of cookie to delete.
+     * @return ResponseCookie with empty values which leads to deletion of the cookie.
+     */
+    private ResponseCookie destroyCookie(String name) {
+        return ResponseCookie.from(name, null)
+                .httpOnly(false)
+                .secure(false)
+                .path("/")
+                .maxAge(0)
+                .domain("localhost")
+                .sameSite("strict")
+                .build();
     }
 }

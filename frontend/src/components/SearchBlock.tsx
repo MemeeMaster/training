@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useData from "@hooks/useData";
+import { WELCOME_PAGE_PATH } from "@config/routes";
 
 /**
  * SearchBlock component for filtering and searching dog data.
@@ -16,7 +17,7 @@ const SearchBlock = () => {
 
   return (
     <div className="searchBlock">
-      <button className="button" onClick={() => navigate("/logged")}>
+      <button className="button" onClick={() => navigate(WELCOME_PAGE_PATH)}>
         Back
       </button>
       <input

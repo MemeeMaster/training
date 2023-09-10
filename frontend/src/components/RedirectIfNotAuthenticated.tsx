@@ -1,6 +1,7 @@
 import { ReactNode, useEffect } from "react";
 import useAuth from "@hooks/useAuth";
 import { useNavigate } from "react-router-dom";
+import { ROOT_PATH } from "@config/routes";
 
 /**
  * Checks if user is authenticated and redirect if not.
@@ -13,7 +14,7 @@ const RedirectIfNotAuthenticated = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated) navigate("/");
+    if (!isAuthenticated) navigate(ROOT_PATH);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

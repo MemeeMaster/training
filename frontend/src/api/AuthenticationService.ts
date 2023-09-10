@@ -6,10 +6,11 @@
  * @module AuthenticationService
  */
 import { apiClient } from "@api/ApiClient";
-import { LoginDTO, TokenDTO, RequestData, ResponseData } from "@interfaces/Api";
-import { authPaths } from "@api/ApiPaths";
+import { LoginDTO, RequestData, ResponseData } from "@interfaces/Api";
+import { authPaths } from "@config/apiPaths";
 
-const { authenticationPath, registrationPath, refreshPath } = authPaths;
+const { authenticationPath, logoutPath, registrationPath, refreshPath } =
+  authPaths;
 
 /**
  * Executes an authentication request.
@@ -20,7 +21,13 @@ const { authenticationPath, registrationPath, refreshPath } = authPaths;
 export const executeAuthentication = async (
   data: RequestData
 ): Promise<ResponseData<LoginDTO>> => {
-  return await apiClient.post(authenticationPath, data);
+  return await apiClient.post(authenticationPath, data, {
+    withCredentials: true,
+  });
+};
+
+export const executeLogout = async () => {
+  await apiClient.post(logoutPath, null, { withCredentials: true });
 };
 
 /**
@@ -41,8 +48,6 @@ export const executeRegistration = async (
  * @param  data - The token data for refresh.
  * @returns A Promise that resolves with the refresh response.
  */
-export const executeRefresh = async (
-  data: TokenDTO
-): Promise<ResponseData<LoginDTO>> => {
-  return await apiClient.post(refreshPath, data);
+export const executeRefresh = async (): Promise<ResponseData<LoginDTO>> => {
+  return await apiClient.post(refreshPath, null, { withCredentials: true });
 };

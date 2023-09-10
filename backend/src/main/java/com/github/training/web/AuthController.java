@@ -16,10 +16,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -69,7 +66,7 @@ public class AuthController {
         userService.createUser(user);
         Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.password(), List.of());
 
-        return ResponseEntity.ok(tokenGenerator.createToken(authentication));
+        return tokenGenerator.createToken(authentication);
     }
 
     /**
@@ -83,21 +80,26 @@ public class AuthController {
     public ResponseEntity<TokenDTO> login(@RequestBody LoginDTO loginDTO) {
         Authentication authentication = daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.email(), loginDTO.password()));
 
-        return ResponseEntity.ok(tokenGenerator.createToken(authentication));
+        return tokenGenerator.createToken(authentication);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Object> logout() {
+        return tokenGenerator.destroyToken();
     }
 
     /**
      * Handles API request sent to URL "/api/auth/token". Endpoint responsible
      * for refreshing JWT token if required.
      *
-     * @param tokenDTO DTO object containing required data to refresh access token. {@code int userId, String accessToken, String refreshToken}
+     * @param refreshToken - token obtained from a cookie.
      * @return {@code ResponseEntity.ok(generatedTokens)} if authentication is successful.
      */
     @PostMapping("/token")
-    public ResponseEntity<TokenDTO> token(@RequestBody TokenDTO tokenDTO) {
-        Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(tokenDTO.refreshToken()));
+    public ResponseEntity<TokenDTO> token(@CookieValue(name = "refresh-token") String refreshToken) {
+        Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
 
-        return ResponseEntity.ok(tokenGenerator.createToken(authentication));
+        return tokenGenerator.createToken(authentication);
     }
 }

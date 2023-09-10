@@ -1,3 +1,4 @@
+import { DATA_LIST_PATH } from "@config/routes";
 import useAuth from "@hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +24,7 @@ const WelcomePage = () => {
    * @function
    */
   const handleListButton = () => {
-    navigate("/list");
+    navigate(DATA_LIST_PATH);
   };
 
   return (
