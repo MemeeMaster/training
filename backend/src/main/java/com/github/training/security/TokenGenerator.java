@@ -37,6 +37,7 @@ public class TokenGenerator {
     private final int REFRESH_EXPIRATION;
     private final String ISSUER;
     private final String AUDIENCE;
+    private final String DOMAIN;
 
     /**
      * Creates new TokenGenerator object / defines required fields.
@@ -48,13 +49,14 @@ public class TokenGenerator {
      * @param ISSUER              - token issuer.
      * @param AUDIENCE            - token audience.
      */
-    public TokenGenerator(JwtEncoder accessTokenEncoder, JwtEncoder refreshTokenEncoder, @Value("${environment.jwt.expiration}") int JWT_EXPIRATION, @Value("${environment.jwt.refresh-expiration}") int REFRESH_EXPIRATION, @Value("${environment.issuer}") String ISSUER, @Value("${environment.audience}") String AUDIENCE) {
+    public TokenGenerator(JwtEncoder accessTokenEncoder, JwtEncoder refreshTokenEncoder, @Value("${environment.jwt.expiration}") int JWT_EXPIRATION, @Value("${environment.jwt.refresh-expiration}") int REFRESH_EXPIRATION, @Value("${environment.issuer}") String ISSUER, @Value("${environment.audience}") String AUDIENCE,  @Value("${environment.domain}") String DOMAIN) {
         this.accessTokenEncoder = accessTokenEncoder;
         this.refreshTokenEncoder = refreshTokenEncoder;
         this.JWT_EXPIRATION = JWT_EXPIRATION;
         this.REFRESH_EXPIRATION = REFRESH_EXPIRATION;
         this.ISSUER = ISSUER;
         this.AUDIENCE = AUDIENCE;
+        this.DOMAIN = DOMAIN;
     }
 
     private String createAccessToken(Authentication authentication) {
@@ -157,7 +159,7 @@ public class TokenGenerator {
                 .secure(secured)
                 .path("/")
                 .maxAge((long) REFRESH_EXPIRATION * 24 * 60 * 60)
-                .domain("localhost")
+                .domain(DOMAIN)
                 .sameSite("strict")
                 .build();
     }
@@ -174,7 +176,7 @@ public class TokenGenerator {
                 .secure(false)
                 .path("/")
                 .maxAge(0)
-                .domain("localhost")
+                .domain(DOMAIN)
                 .sameSite("strict")
                 .build();
     }
