@@ -20,6 +20,10 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * CLass containing logic used to generate or load private and public key pairs.
+ * Fetched keys are then returned for use by JWT access and refresh tokens.
+ */
 @Component
 @Slf4j
 public class KeyUtils {
@@ -50,6 +54,18 @@ public class KeyUtils {
         return _refreshTokenKeyPair;
     }
 
+    /**
+     * Generates or loads key pair used by JWT tokens.
+     * More in detail, this method gets key paths and checks if those files exist.
+     * If they do, method is converting byte form of the keys and converts them
+     * to {@code PublicKey} or {@code PrivateKey} objects.
+     * If there are no byte keys, method generates them with RSA algorithm with key size
+     * equal to 2048, saves them in files and converts like above.
+     *
+     * @param publicKeyPath - path to public key
+     * @param privateKeyPath - path to private key
+     * @return {@code keyPair} generated if it doesn't exist or loaded if it exist.
+     */
     private KeyPair getKeyPair(String publicKeyPath, String privateKeyPath) {
         KeyPair keyPair;
 

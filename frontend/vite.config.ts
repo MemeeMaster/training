@@ -12,7 +12,9 @@ export default defineConfig({
       "@interfaces": "/src/interfaces",
       "@providers": "/src/providers",
       "@style": "/src/style",
-      "@env": "/src/env"
+      "@env": "/src/env",
+      "@views": "/src/views",
+      "@config": "/src/config"
     },
   },
 });

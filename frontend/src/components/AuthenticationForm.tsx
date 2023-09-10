@@ -1,9 +1,15 @@
-import React, { useEffect } from "react";
-import Login from "@components/Login";
-import Registration from "@components/Registration";
+import { useEffect } from "react";
+import Login from "@views/Login";
+import Registration from "@views/Registration";
 import useAuth from "@hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
+/**
+ * Component deciding which form component to render.
+ * 
+ * @component
+ * @returns The Form component
+ */
 const Form = () => {
   const { isLogin, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -14,7 +20,7 @@ const Form = () => {
   }, []);
 
   return (
-    <React.Fragment>{isLogin ? <Login /> : <Registration />}</React.Fragment>
+    <>{isLogin ? <Login /> : <Registration />}</>
   );
 };
 

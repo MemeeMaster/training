@@ -1,9 +1,0 @@
-pierwsze co zrób to logowanie i rejestracje w formie api z udostępnioną dokumentacją w swaggerze. Po zalogowaniu użytkownika api niech zwraca token JWT, issuer, audience, exp, te ustawienia koniecznie muszą być konfigurowalne.
-
-tutaj mozesz odpowiedziec na pytanie jak powinien być przechowywany token jwt po stronie klienckiej, co nie powinno byc w takim tokenie umieszcane
-
-zrób formularze pod logowanie i rejestracje, zrób obsługę api tokena za pomocą interceptora w dowolnym http kliencie. formularze mogą być w dowolnym frameworku frotnendowym.
-
-oczywiście api i apka kliencka musowo szyfrowana tzn https
-
-a i dodatkoo, api oczywiscie połączone z bazą danych, tutaj będziesz mógł się zapoznać z ORM

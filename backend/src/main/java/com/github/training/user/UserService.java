@@ -9,21 +9,49 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 
+/**
+ * UserService class containing business logic for {@code User.class}.
+ * This class is connecting {@code UserController.class} and {@code UserRepository.class}
+ */
 @Service
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
+    /**
+     * UserRepository component containing methods to connect with MySQL database.
+     */
     UserRepository userRepository;
+    /**
+     * PasswordEncoder component responsible for encoding passwords.
+     */
     PasswordEncoder passwordEncoder;
 
+    /**
+     * Saves passed User to repository.
+     *
+     * @param user passed to be saved in repository.
+     */
     public void createUser(UserDetails user) {
         ((User) user).setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save((User) user);
     }
 
-    public boolean userExists(String username) {
+    /**
+     * Checks if User exists by email.
+     *
+     * @param username identifier passed to identify user account.
+     * @return {@code true} if User is found or {@code false} if not.
+     */
+    public boolean isUserExistsByEmail(String username) {
         return userRepository.existsByEmail(username);
     }
 
+    /**
+     * Loads User, if exists in the database.
+     *
+     * @param email identifier passed to identify user account.
+     * @return {@code UserDetails} - User entity from database.
+     * @throws UsernameNotFoundException if User is not found in database.
+     */
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(
