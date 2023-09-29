@@ -14,7 +14,8 @@ export default defineConfig({
       "@style": "/src/style",
       "@env": "/src/env",
       "@views": "/src/views",
-      "@config": "/src/config"
+      "@config": "/src/config",
+      "@images": "/src/images"
     },
   },
 });

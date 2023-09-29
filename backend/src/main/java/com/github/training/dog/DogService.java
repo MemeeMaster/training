@@ -37,7 +37,7 @@ public class DogService {
      * @return {@code ResponseEntity.ok(DogsThatMatchFilter)}
      */
     public ResponseEntity<Page<Dog>> getDogsPageFiltered(int page, FilterDTO filter) {
-        Pageable requestedPage = PageRequest.of(page - 1, 20);
+        Pageable requestedPage = PageRequest.of(page - 1, 9);
         return ResponseEntity.ok(dogRepository.findAllDogsPassingFilter(filter.breed(), filter.gender(), filter.age(), filter.color(), filter.searchBarData(), requestedPage));
     }
 
@@ -68,8 +68,8 @@ public class DogService {
             return getDogsPageFiltered(page, filter);
 
         Pageable requestedPage;
-        if (direction.equals(Direction.ASC.label)) requestedPage = PageRequest.of(page - 1, 20, Sort.by(field).ascending());
-        else requestedPage = PageRequest.of(page - 1, 20, Sort.by(field).descending());
+        if (direction.equals(Direction.ASC.label)) requestedPage = PageRequest.of(page - 1, 9, Sort.by(field).ascending());
+        else requestedPage = PageRequest.of(page - 1, 9, Sort.by(field).descending());
 
         return getDogsPageFiltered(filter, requestedPage);
     }

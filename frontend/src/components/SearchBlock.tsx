@@ -1,6 +1,9 @@
+import { KeyboardEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import useData from "@hooks/useData";
-import { WELCOME_PAGE_PATH } from "@config/routes";
+import { ROOT_PATH } from "@config/routes";
+import { Button, IconButton, Paper, InputBase, Box } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 /**
  * SearchBlock component for filtering and searching dog data.
@@ -12,24 +15,51 @@ import { WELCOME_PAGE_PATH } from "@config/routes";
  * @component
  */
 const SearchBlock = () => {
-  const { filters, handleFilterChange } = useData();
+  const { filters, handleFilterChange, handleFiltersReset, fetchDogsData } =
+    useData();
   const navigate = useNavigate();
 
+  const handleEnterKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key == "Enter") {
+      fetchDogsData({ page: 1, filter: filters });
+      handleFiltersReset();
+    }
+  };
+
   return (
-    <div className="searchBlock">
-      <button className="button" onClick={() => navigate(WELCOME_PAGE_PATH)}>
+    <Box sx={{ width: "100%", display: "flex", flexDirection: "row" }}>
+      <Button variant="outlined" onClick={() => navigate(ROOT_PATH)}>
         Back
-      </button>
-      <input
-        className="searchInput"
-        type="text"
-        placeholder="Search"
-        value={filters.searchBarData}
-        onChange={(e) => {
-          handleFilterChange("searchBarData", e);
+      </Button>
+      <Paper
+        sx={{
+          p: "2px 4px",
+          display: "flex",
+          alignItems: "center",
+          width: 400,
+          mx: 1,
         }}
-      />
-    </div>
+      >
+        <InputBase
+          sx={{ ml: 1, flex: 1 }}
+          placeholder="Search"
+          inputProps={{ "aria-label": "search" }}
+          value={filters.searchBarData}
+          onChange={(e) => {
+            handleFilterChange("searchBarData", e);
+          }}
+          onKeyDown={handleEnterKeyPress}
+        />
+        <IconButton
+          type="button"
+          sx={{ p: "10px" }}
+          aria-label="search"
+          onClick={() => fetchDogsData({ page: 1, filter: filters })}
+        >
+          <SearchIcon />
+        </IconButton>
+      </Paper>
+    </Box>
   );
 };
 

@@ -1,9 +1,8 @@
-import { ChangeEvent } from "react";
 import {
   DogFilter,
   DogPage,
   DogSortDTO,
-  PaginationParams,
+  DogFilterEvent,
 } from "@interfaces/Api";
 import { DataContextType } from "@interfaces/ContextTypes";
 import { createContext, ReactNode, useState } from "react";
@@ -34,7 +33,6 @@ const initialState: DogFilter = {
  */
 export const DataContext = createContext<DataContextType>({
   dogData: undefined,
-  paginationButtons: [],
   isDataFetched: false,
   filters: initialState,
   handleFilterChange: () => {},
@@ -56,7 +54,6 @@ export const DataContext = createContext<DataContextType>({
 const DataProvider = ({ children }: { children: ReactNode }) => {
   const [filters, setFilters] = useState<DogFilter>(initialState);
   const [dogData, setDogData] = useState<DogPage>();
-  const [paginationButtons, setPaginationButtons] = useState<JSX.Element[]>([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const { handleToastOpening } = useToast();
 
@@ -75,44 +72,24 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
     direction = "none",
     filter = initialState,
   }: DogSortDTO) => {
+    if (filter.age && filter.age < 1) {
+      handleToastOpening("Please enter an age greater than 0.", "warning");
+      return;
+    }
+
     try {
       const response = await executeDogList({ page, field, direction, filter });
+
+      if (response.empty) {
+        handleToastOpening("No results found.", "info");
+        return;
+      }
+
       setDogData(response);
-      getPaginationButtons({ response, filter, direction, field });
       setIsDataFetched(true);
     } catch (e) {
-      handleToastOpening("Couldn't fetch dogs data.");
+      handleToastOpening("Couldn't fetch dogs data.", "error");
     }
-  };
-
-  /**
-   * Generates pagination buttons for the fetched data.
-   *
-   * This function generates pagination buttons based on the total number of
-   * pages in the fetched data. It allows users to navigate through pages.
-   *
-   * @param params - Parameters for pagination.
-   */
-  const getPaginationButtons = ({
-    response,
-    filter,
-    direction,
-    field,
-  }: PaginationParams) => {
-    const newButtons = [];
-    for (let i = 1; i <= response.totalPages; i++) {
-      newButtons.push(
-        <button
-          className="pageButton"
-          key={i}
-          onClick={() => fetchDogsData({ page: i, filter, direction, field })}
-        >
-          {i}
-        </button>
-      );
-    }
-
-    setPaginationButtons(newButtons);
   };
 
   const handleFetchStatus = (isFetched: boolean) => {
@@ -136,10 +113,7 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
    * @param field - The field being changed.
    * @param e - The event representing the change.
    */
-  const handleFilterChange = (
-    field: keyof DogFilter,
-    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) => {
+  const handleFilterChange = (field: keyof DogFilter, e: DogFilterEvent) => {
     const updatedState: DogFilter = { ...filters, [field]: e.target.value };
     setFilters(updatedState);
   };
@@ -148,7 +122,6 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
     <DataContext.Provider
       value={{
         dogData,
-        paginationButtons,
         isDataFetched,
         filters,
         handleFilterChange,

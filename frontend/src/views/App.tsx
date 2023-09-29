@@ -8,7 +8,10 @@ import Toast from "../components/Toast";
 import { jwtToken } from "@env/environments";
 import { apiClient } from "@api/ApiClient";
 import DogTable from "./DogTable";
-import { DATA_LIST_PATH, ROOT_PATH, WELCOME_PAGE_PATH } from "@config/routes";
+import { CssBaseline } from "@mui/material";
+import { DATA_LIST_PATH, LOGIN_PATH, ROOT_PATH } from "@config/routes";
+import AppTheme from "@style/AppTheme";
+import ResponsiveAppBar from "@components/NavBar";
 
 /**
  * Main application component.
@@ -63,7 +66,10 @@ const App = () => {
    * An array of route objects representing public routes that don't require
    * authentication.
    */
-  const publicRoutes = [{ path: ROOT_PATH, component: <Form /> }];
+  const publicRoutes = [
+    { path: LOGIN_PATH, component: <Form /> },
+    { path: ROOT_PATH, component: <WelcomePage /> },
+  ];
 
   /**
    * Protected routes for the application.
@@ -72,32 +78,33 @@ const App = () => {
    * authentication. These routes are wrapped in the `RedirectIfNotAuthenticated`
    * component to ensure authentication before rendering.
    */
-  const protectedRoutes = [
-    { path: WELCOME_PAGE_PATH, component: <WelcomePage /> },
-    { path: DATA_LIST_PATH, component: <DogTable /> },
-  ];
+  const protectedRoutes = [{ path: DATA_LIST_PATH, component: <DogTable /> }];
 
   return (
     <>
-      <Toast />
-      <Routes>
-        {publicRoutes.map((route, idx) => (
-          <Route path={route.path} key={idx} element={route.component} />
-        ))}
-        {protectedRoutes.map((route, idx) => (
-          <Route
-            path={route.path}
-            key={idx}
-            element={
-              <>
-                <RedirectIfNotAuthenticated>
-                  {route.component}
-                </RedirectIfNotAuthenticated>
-              </>
-            }
-          />
-        ))}
-      </Routes>
+      <AppTheme>
+        <CssBaseline enableColorScheme />
+        <Toast />
+        <ResponsiveAppBar />
+        <Routes>
+          {publicRoutes.map((route, idx) => (
+            <Route path={route.path} key={idx} element={route.component} />
+          ))}
+          {protectedRoutes.map((route, idx) => (
+            <Route
+              path={route.path}
+              key={idx}
+              element={
+                <>
+                  <RedirectIfNotAuthenticated>
+                    {route.component}
+                  </RedirectIfNotAuthenticated>
+                </>
+              }
+            />
+          ))}
+        </Routes>
+      </AppTheme>
     </>
   );
 };

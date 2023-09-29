@@ -10,7 +10,7 @@ import { RequestData } from "@interfaces/Api";
 import useToast from "@hooks/useToast";
 import { AxiosError } from "axios";
 import { jwtToken } from "@env/environments";
-import { ROOT_PATH, WELCOME_PAGE_PATH } from "@config/routes";
+import { ROOT_PATH } from "@config/routes";
 import Cookies from "universal-cookie";
 
 /**
@@ -21,6 +21,7 @@ import Cookies from "universal-cookie";
 export const AuthContext = createContext<AuthContextType>({
   isLogin: true,
   isAuthenticated: false,
+  loggedUser: "",
   handleLoginChange: () => {},
   handleLogin: () => {},
   handleLogout: () => {},
@@ -41,6 +42,7 @@ export const AuthContext = createContext<AuthContextType>({
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [loggedUser, setLoggedUser] = useState("");
   const navigate = useNavigate();
   const { handleToastOpening } = useToast();
 
@@ -66,14 +68,16 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       const response = await executeAuthentication(data);
       localStorage.setItem(jwtToken, response.data.accessToken);
+      setLoggedUser(response.data.username);
 
       authenticate();
     } catch (e) {
       handleLogout();
 
-      if (e instanceof AxiosError) handleToastOpening(e.response!.data);
+      if (e instanceof AxiosError)
+        handleToastOpening(e.response!.data, "success");
       else {
-        handleToastOpening("Login error.");
+        handleToastOpening("Login error.", "error");
       }
     }
   };
@@ -91,7 +95,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         const res = await executeRefresh().then((res) => res.data);
 
         localStorage.setItem(jwtToken, res.accessToken);
-        handleToastOpening("Session refreshed. Try again.");
+        handleToastOpening("Session refreshed. Try again.", "info");
       }
     } catch (e) {
       forceLogout();
@@ -109,11 +113,12 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await executeLogout();
       localStorage.removeItem(jwtToken);
+      setLoggedUser("");
       setIsAuthenticated(false);
       navigate(ROOT_PATH);
-      handleToastOpening("Logged out.");
+      handleToastOpening("Logged out.", "info");
     } catch (e) {
-      handleToastOpening("Error during logout. Please try again.");
+      handleToastOpening("Error during logout. Please try again.", "error");
     }
   };
 
@@ -125,8 +130,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
    */
   const authenticate = () => {
     setIsAuthenticated(true);
-    navigate(WELCOME_PAGE_PATH);
-    handleToastOpening("Logged in.");
+    navigate(ROOT_PATH);
+    handleToastOpening("Logged in.", "success");
   };
 
   return (
@@ -134,6 +139,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         isLogin,
         isAuthenticated,
+        loggedUser,
         handleLoginChange,
         handleLogin,
         handleLogout,
