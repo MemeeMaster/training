@@ -1,5 +1,4 @@
-import { ChangeEvent } from "react";
-import { RequestData, DogPage, DogFilter, DogSortDTO } from "./Api";
+import { RequestData, DogPage, DogFilter, DogSortDTO, DogFilterEvent } from "./Api";
 import { AlertColor } from "@mui/material";
 
 export interface AuthContextType {
@@ -23,12 +22,11 @@ export interface ToastContextType {
 
 export interface DataContextType {
   dogData: DogPage | undefined;
-  paginationButtons: JSX.Element[];
   isDataFetched: boolean;
   filters: DogFilter;
   handleFilterChange: (
     field: keyof DogFilter,
-    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+    e: DogFilterEvent
   ) => void;
   handleFiltersReset: () => void;
   fetchDogsData: (data: DogSortDTO) => void;

@@ -33,12 +33,8 @@ const theme = createTheme({
         body: {
           width: "100%",
           minHeight: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
           fontFamily: "sans-serif",
-          overflow: "hidden",
+          overflowX: "hidden",
         },
       },
     },

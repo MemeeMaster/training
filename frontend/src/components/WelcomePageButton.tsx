@@ -1,11 +1,7 @@
 import { Button } from "@mui/material";
+import { StyledButtonProps } from "@interfaces/Api";
 
-interface WelcomePageButtonProps {
-  content: string;
-  onClick: () => void;
-}
-
-const WelcomePageButton = ({ content, onClick }: WelcomePageButtonProps) => {
+const WelcomePageButton = ({ content, onClick }: StyledButtonProps) => {
   return (
     <Button sx={{ fontSize: "1.2rem" }} variant="outlined" onClick={onClick}>
       {content}

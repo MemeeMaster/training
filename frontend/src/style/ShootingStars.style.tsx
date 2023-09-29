@@ -59,7 +59,7 @@ export const StarsSection = styled(Box)`
     background: linear-gradient(90deg, #fff, transparent);
   }
 
-  & span:nth-child(1) {
+  & span:nth-of-type(1) {
     top: -10px;
     right: 0;
     left: initial;
@@ -67,7 +67,7 @@ export const StarsSection = styled(Box)`
     animation-duration: 1s;
   }
 
-  & span:nth-child(2) {
+  & span:nth-of-type(2) {
     top: -10px;
     right: 80px;
     left: initial;
@@ -75,7 +75,7 @@ export const StarsSection = styled(Box)`
     animation-duration: 3s;
   }
 
-  & span:nth-child(3) {
+  & span:nth-of-type(3) {
     top: 80px;
     right: 0px;
     left: initial;
@@ -83,7 +83,7 @@ export const StarsSection = styled(Box)`
     animation-duration: 2s;
   }
 
-  & span:nth-child(4) {
+  & span:nth-of-type(4) {
     top: -10px;
     right: 180px;
     left: initial;
@@ -91,7 +91,7 @@ export const StarsSection = styled(Box)`
     animation-duration: 1.5s;
   }
 
-  & span:nth-child(5) {
+  & span:nth-of-type(5) {
     top: -10px;
     right: 400px;
     left: initial;
@@ -99,14 +99,15 @@ export const StarsSection = styled(Box)`
     animation-duration: 2.5s;
   }
 
-  & span:nth-child(6) {
+  & span:nth-of-type(6) {
     top: -10px;
     right: 600px;
     left: initial;
     animation-delay: 1s;
     animation-duration: 3s;
   }
-  & span:nth-child(7) {
+
+  & span:nth-of-type(7) {
     top: 300px;
     right: 0px;
     left: initial;
@@ -114,7 +115,7 @@ export const StarsSection = styled(Box)`
     animation-duration: 1.75s;
   }
 
-  & span:nth-child(8) {
+  & span:nth-of-type(8) {
     top: -10px;
     right: 700px;
     left: initial;
@@ -122,7 +123,7 @@ export const StarsSection = styled(Box)`
     animation-duration: 1.25s;
   }
 
-  & span:nth-child(9) {
+  & span:nth-of-type(9) {
     top: -10px;
     right: 1000px;
     left: initial;
@@ -130,7 +131,7 @@ export const StarsSection = styled(Box)`
     animation-duration: 2.25s;
   }
 
-  & span:nth-child(10) {
+  & span:nth-of-type(10) {
     top: -10px;
     right: 1000px;
     left: initial;

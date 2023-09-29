@@ -1,4 +1,6 @@
+import { SelectChangeEvent } from "@mui/material";
 import { AxiosHeaders } from "axios";
+import { ChangeEvent } from "react";
 
 export interface RequestData {
   email: string;
@@ -46,6 +48,10 @@ export interface DogFilter {
   searchBarData: string;
 }
 
+export type DogFilterEvent =
+  | ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
+  | SelectChangeEvent<string>;
+
 export interface DogPage {
   content: Dog[];
   pageable: Record<string, unknown>;
@@ -73,7 +79,7 @@ export interface DogSortDTO {
 }
 
 export interface DogSortConfig {
-  key: string | null;
+  key: string | "none";
   direction: string;
 }
 
@@ -82,4 +88,9 @@ export interface PaginationParams {
   filter: DogFilter;
   direction: string;
   field: string;
+}
+
+export interface StyledButtonProps {
+  content: string;
+  onClick: () => void;
 }
