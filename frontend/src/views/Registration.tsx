@@ -3,7 +3,13 @@ import * as Yup from "yup";
 import useAuth from "@hooks/useAuth";
 import { executeRegistration } from "@api/AuthenticationService";
 import useToast from "@hooks/useToast";
-import { AxiosError } from "axios";
+import { Typography } from "@mui/material";
+import FormErrorPlaceholder from "@components/FormErrorPlaceholder";
+import SubmitButton from "@components/SubmitButton";
+import LoginFormLink from "@components/LoginFormLink";
+import LoginFormBackground from "@components/LoginFormBackground";
+import FormError from "@components/FormError";
+import FormTextField from "@components/FormTextField";
 
 /**
  * Validation schema for user registration form.
@@ -15,14 +21,24 @@ import { AxiosError } from "axios";
  * @constant
  */
 const validation = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Required"),
+  email: Yup.string()
+    .email("Invalid email")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid email format"
+    )
+    .required("Email is required"),
   password: Yup.string()
-    .min(6, "Minimum 6 characters")
+    .min(6, "At least 6 characters")
     .max(30, "Maximum 30 characters")
-    .required("Required"),
+    .matches(
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
+      "Password is too weak"
+    )
+    .required("Password is required"),
   repeatPassword: Yup.string()
     .oneOf([Yup.ref("password")], "Passwords don't match")
-    .required("Required"),
+    .required("Please confirm your password"),
 });
 
 /**
@@ -40,8 +56,10 @@ const Registration = () => {
   const { handleToastOpening } = useToast();
 
   return (
-    <div className="wrapper">
-      <h2 className="header">Registration</h2>
+    <LoginFormBackground>
+      <Typography sx={{ marginBottom: 2 }} variant="h3">
+        Create account
+      </Typography>
       <Formik
         initialValues={{
           email: "",
@@ -52,57 +70,56 @@ const Registration = () => {
         onSubmit={async ({ email, password }) => {
           try {
             await executeRegistration({ email, password });
-            handleToastOpening("Registration successful.");
+            handleToastOpening("Account created.", "success");
             handleLoginChange();
           } catch (e) {
-            if (e instanceof AxiosError) handleToastOpening(e.response!.data);
-            else {
-              handleToastOpening("Registration error.");
-            }
+            handleToastOpening(
+              "Account with this e-mail already exists.",
+              "error"
+            );
           }
         }}
       >
         {({ errors, touched }) => (
-          <Form className="form">
-            <label htmlFor="email">E-mail:</label>
-            <Field name="email" id="email" className="textInput" />
-
+          <Form>
+            <Field as={FormTextField} label="E-mail" name="email" id="email" />
             {errors.email && touched.email ? (
-              <p className="error">{errors.email}</p>
-            ) : null}
+              <FormError>{errors.email}</FormError>
+            ) : (
+              <FormErrorPlaceholder />
+            )}
 
-            <label htmlFor="password">Password:</label>
             <Field
+              as={FormTextField}
+              label="Password"
               name="password"
               id="password"
               type="password"
-              className="textInput"
             />
-
             {errors.password && touched.password ? (
-              <p className="error">{errors.password}</p>
-            ) : null}
+              <FormError>{errors.password}</FormError>
+            ) : (
+              <FormErrorPlaceholder />
+            )}
 
-            <label htmlFor="repeatPassword">Repeat password:</label>
             <Field
+              as={FormTextField}
+              label="Repeat password"
               name="repeatPassword"
               id="repeatPassword"
               type="password"
-              className="textInput"
             />
-
             {errors.repeatPassword && touched.repeatPassword ? (
-              <p className="error">{errors.repeatPassword}</p>
-            ) : null}
-
-            <input type="submit" value="Submit" className="button" />
+              <FormError>{errors.repeatPassword}</FormError>
+            ) : (
+              <FormErrorPlaceholder />
+            )}
+            <SubmitButton content="submit" />
           </Form>
         )}
       </Formik>
-      <p className="link" onClick={handleLoginChange}>
-        Login
-      </p>
-    </div>
+      <LoginFormLink onClick={handleLoginChange} content="Sign In" />
+    </LoginFormBackground>
   );
 };
 

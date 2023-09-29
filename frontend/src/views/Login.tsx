@@ -1,6 +1,12 @@
 import { useFormik } from "formik";
 import useAuth from "@hooks/useAuth";
 import { RequestData } from "@interfaces/Api";
+import { Typography } from "@mui/material";
+import StyledForm from "@components/StyledForm";
+import SubmitButton from "@components/SubmitButton";
+import LoginFormLink from "@components/LoginFormLink";
+import LoginFormBackground from "@components/LoginFormBackground";
+import FormTextField from "@components/FormTextField";
 
 /**
  * Component for user login.
@@ -13,7 +19,7 @@ import { RequestData } from "@interfaces/Api";
  */
 const Login = () => {
   const { handleLogin, handleLoginChange } = useAuth();
-    /**
+  /**
    * Hook for defining formik initial values and action on submit.
    */
   const formik = useFormik({
@@ -27,31 +33,31 @@ const Login = () => {
   });
 
   return (
-    <div className="wrapper">
-      <h2 className="header">Login</h2>
-      <form className="form" onSubmit={formik.handleSubmit}>
-        <label htmlFor="email">E-mail:</label>
-        <input
+    <LoginFormBackground>
+      <Typography sx={{ marginBottom: 2 }} variant="h3">
+        Sign In
+      </Typography>
+      <StyledForm onSubmit={formik.handleSubmit}>
+        <FormTextField
+          label="E-mail"
           type="text"
           id="email"
           onChange={formik.handleChange}
           value={formik.values.email}
-          className="textInput"
+          marginTop={2}
         />
-        <label htmlFor="password">Password:</label>
-        <input
+        <FormTextField
+          label="Password"
           type="password"
           id="password"
           onChange={formik.handleChange}
           value={formik.values.password}
-          className="textInput"
+          marginTop={2}
         />
-        <input type="submit" value="Login" className="button" />
-      </form>
-      <p className="link" onClick={handleLoginChange}>
-        Registration
-      </p>
-    </div>
+        <SubmitButton content="sign in" />
+      </StyledForm>
+      <LoginFormLink onClick={handleLoginChange} content="Create account" />
+    </LoginFormBackground>
   );
 };
 

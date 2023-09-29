@@ -31,7 +31,7 @@ const FilterBlock = () => {
         const fetchedOptions = await executeOptionsFetch();
         setOptions(fetchedOptions);
       } catch (e) {
-        handleToastOpening("Could not fetch options.");
+        handleToastOpening("Could not fetch options.", "error");
       }
     };
 

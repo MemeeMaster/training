@@ -17,7 +17,7 @@ export interface ResponseData<T> {
 // === AUTH RESPONSES ===
 
 export interface LoginDTO {
-  userId: number;
+  username: string;
   accessToken: string;
   refreshToken: string;
 }

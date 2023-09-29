@@ -1,9 +1,11 @@
 import { ChangeEvent } from "react";
 import { RequestData, DogPage, DogFilter, DogSortDTO } from "./Api";
+import { AlertColor } from "@mui/material";
 
 export interface AuthContextType {
   isLogin: boolean;
   isAuthenticated: boolean;
+  loggedUser: string,
   handleLoginChange: () => void;
   handleLogin: (data: RequestData) => void;
   handleLogout: () => void;
@@ -14,7 +16,8 @@ export interface AuthContextType {
 export interface ToastContextType {
   showToast: boolean;
   message: string;
-  handleToastOpening: (message: string) => void;
+  severity: AlertColor;
+  handleToastOpening: (message: string, servity: AlertColor) => void;
   handleToastClosing: () => void;
 }
 
@@ -27,7 +30,7 @@ export interface DataContextType {
     field: keyof DogFilter,
     e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => void;
-  handleFiltersReset: () => void,
+  handleFiltersReset: () => void;
   fetchDogsData: (data: DogSortDTO) => void;
   handleFetchStatus: (isFetched: boolean) => void;
 }

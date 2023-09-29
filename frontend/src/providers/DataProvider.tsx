@@ -81,7 +81,7 @@ const DataProvider = ({ children }: { children: ReactNode }) => {
       getPaginationButtons({ response, filter, direction, field });
       setIsDataFetched(true);
     } catch (e) {
-      handleToastOpening("Couldn't fetch dogs data.");
+      handleToastOpening("Couldn't fetch dogs data.", "error");
     }
   };
 

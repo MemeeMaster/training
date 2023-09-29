@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -62,11 +63,15 @@ public class AuthController {
      */
     @PostMapping("/register")
     public ResponseEntity<TokenDTO> register(@RequestBody SignupDTO signupDTO) {
-        User user = new User(signupDTO.email(), signupDTO.password(), Role.USER, false, false, true);
-        userService.createUser(user);
-        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.password(), List.of());
+        try {
+            User user = new User(signupDTO.email(), signupDTO.password(), Role.USER, false, false, true);
+            userService.createUser(user);
+            Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.password(), List.of());
 
-        return tokenGenerator.createToken(authentication);
+            return tokenGenerator.createToken(authentication);
+        } catch (ResponseStatusException exception) {
+            return new ResponseEntity<>(exception.getStatusCode());
+        }
     }
 
     /**

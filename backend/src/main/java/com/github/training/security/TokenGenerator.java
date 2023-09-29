@@ -105,7 +105,7 @@ public class TokenGenerator {
             );
         }
 
-        int userId = user.getId();
+        String username = user.getEmail();
         String accessToken = createAccessToken(authentication);
         String refreshToken;
 
@@ -126,7 +126,7 @@ public class TokenGenerator {
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString())
                 .header(HttpHeaders.SET_COOKIE, isRefreshTokenPresentCookie.toString())
-                .body(new TokenDTO(userId, accessToken));
+                .body(new TokenDTO(username, accessToken));
     }
 
     /**

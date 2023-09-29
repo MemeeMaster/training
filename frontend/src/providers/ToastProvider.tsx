@@ -1,5 +1,6 @@
 import { useState, createContext, ReactNode } from "react";
 import { ToastContextType } from "@interfaces/ContextTypes";
+import { AlertColor } from "@mui/material";
 
 /**
  * Toast context for managing toast appearance.
@@ -10,6 +11,7 @@ import { ToastContextType } from "@interfaces/ContextTypes";
 export const ToastContext = createContext<ToastContextType>({
   showToast: false,
   message: "",
+  severity: "info",
   handleToastOpening: () => {},
   handleToastClosing: () => {},
 });
@@ -24,15 +26,17 @@ export const ToastContext = createContext<ToastContextType>({
 const ToastProvider = ({ children }: { children: ReactNode }) => {
   const [showToast, setShowToast] = useState(false);
   const [message, setMessage] = useState("");
+  const [severity, setSeverity] = useState<AlertColor>("info");
 
   /**
    * Handles toast opening.
    *
    * @param message - message displayed in toast.
    */
-  const handleToastOpening = (message: string) => {
+  const handleToastOpening = (message: string, servity: AlertColor) => {
     setMessage(message);
     setShowToast(true);
+    setSeverity(servity);
   };
 
   /**
@@ -44,7 +48,13 @@ const ToastProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <ToastContext.Provider
-      value={{ showToast, message, handleToastOpening, handleToastClosing }}
+      value={{
+        showToast,
+        message,
+        severity,
+        handleToastOpening,
+        handleToastClosing,
+      }}
     >
       {children}
     </ToastContext.Provider>
